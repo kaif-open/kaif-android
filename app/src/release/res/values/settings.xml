@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="endpoint">https://kaif.io</string>
+    <string name="redirect_uri">oauthkf://kf-sample/callback</string>
+    <string name="redirect_uri_host">kf-sample</string>
+    <string name="redirect_uri_path_prefix">/callback</string>
+    <string name="redirect_uri_scheme">oauthkf</string>
+</resources>

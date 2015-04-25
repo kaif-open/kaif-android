@@ -1,0 +1,8 @@
+<resources>
+
+    <style name="Theme.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/kaif_blue</item>
+        <item name="colorPrimaryDark">@color/kaif_blue_dark</item>
+        <item name="colorButtonNormal">@color/kaif_button_blue</item>
+    </style>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="kaif_blue">#2D3E50</color>
+    <color name="kaif_blue_dark">#1b252f</color>
+    <color name="kaif_blue_light">#d1dbe5</color>
+    <color name="vote_state_empty">#B3B3B3</color>
+    <color name="vote_state_up">#FF6600</color>
+    <color name="vote_state_down">#564FFF</color>
+    <color name="info_gray">#777777</color>
+    <color name="kaif_selected_blue">#66cccccc</color>
+    <color name="kaif_button_blue">#0078E7</color>
+    <color name="code_gray">#ffcccccc</color>
+</resources>

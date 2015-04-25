@@ -1,0 +1,70 @@
+package io.kaif.mobile.service;
+
+import io.kaif.mobile.model.Debate;
+import io.kaif.mobile.model.DebateNode;
+import retrofit.http.Body;
+import retrofit.http.GET;
+import retrofit.http.PUT;
+import retrofit.http.Path;
+import rx.Observable;
+
+public interface DebateService {
+
+  class CreateDebateEntry {
+    String articleId;
+    String parentDebateId;
+    String content;
+
+    public CreateDebateEntry(String articleId, String parentDebateId, String content) {
+      this.articleId = articleId;
+      this.parentDebateId = parentDebateId;
+      this.content = content;
+    }
+
+    @Override
+    public String toString() {
+      return "CreateDebateEntry{" +
+          "articleId='" + articleId + '\'' +
+          ", parentDebateId='" + parentDebateId + '\'' +
+          ", content='" + content + '\'' +
+          '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+
+      CreateDebateEntry that = (CreateDebateEntry) o;
+
+      if (!articleId.equals(that.articleId)) {
+        return false;
+      }
+      if (parentDebateId != null
+          ? !parentDebateId.equals(that.parentDebateId)
+          : that.parentDebateId != null) {
+        return false;
+      }
+      return content.equals(that.content);
+
+    }
+
+    @Override
+    public int hashCode() {
+      int result = articleId.hashCode();
+      result = 31 * result + (parentDebateId != null ? parentDebateId.hashCode() : 0);
+      result = 31 * result + content.hashCode();
+      return result;
+    }
+  }
+
+  @GET("/v1/debate/article/{articleId}/tree")
+  Observable<DebateNode> getDebateTree(@Path("articleId") String articleId);
+
+  @PUT("/v1/debate")
+  Observable<Debate> debate(@Body CreateDebateEntry createDebateEntry);
+}

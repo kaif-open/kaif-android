@@ -1,0 +1,118 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+
+  def Properties versionProps = new Properties()
+  versionProps.load(new FileInputStream(file('version.properties')))
+  def buildVersionCode = versionProps['VERSION_CODE']
+  def buildVersionName = versionProps['VERSION_NAME_PREFIX'] + "." + buildVersionCode;
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  packagingOptions {
+    exclude 'LICENSE.txt'
+  }
+
+  compileSdkVersion 22
+  buildToolsVersion "22.0.1"
+
+  defaultConfig {
+    applicationId "io.kaif.mobile"
+    minSdkVersion 16
+    targetSdkVersion 22
+    versionCode buildVersionCode.toInteger()
+    versionName buildVersionName
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  signingConfigs {
+
+    def Properties props = new Properties()
+    props.load(new FileInputStream(file('../secret/password.properties')))
+
+    debug {
+      storeFile file("../secret/kaif-keystore.jks")
+      storePassword props["KEY_STORE_PASSWORD"]
+    }
+    release {
+      storeFile file("../secret/kaif-keystore.jks")
+      storePassword props["KEY_STORE_PASSWORD"]
+      keyAlias "ReleaseKey"
+      keyPassword props["RELEASE_KEY_PASSWORD"]
+    }
+  }
+
+  buildTypes {
+    debug {
+      signingConfig signingConfigs.debug
+    }
+    release {
+      signingConfig signingConfigs.release
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  lintOptions {
+    disable 'InvalidPackage'
+    abortOnError false
+  }
+
+  android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+      def outputFile = output.outputFile
+      if (outputFile != null && outputFile.name.endsWith('.apk')) {
+        File apk = outputFile
+        output.outputFile = new File(apk.parentFile, apk.name.replace(".apk", "-${buildVersionName}.apk"))
+      }
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:1.8.1'
+
+  apt "com.google.dagger:dagger-compiler:2.0"
+
+  provided 'javax.annotation:jsr250-api:1.0'
+
+  compile 'com.android.support:support-v4:22.1.0'
+  compile 'com.android.support:appcompat-v7:22.1.0'
+  compile 'com.android.support:recyclerview-v7:22.0.0'
+  compile 'io.reactivex:rxandroid:0.24.0'
+  compile 'io.reactivex:rxandroid-framework:0.24.0'
+  compile 'com.jakewharton:butterknife:6.1.0'
+  compile 'com.squareup.retrofit:retrofit:1.9.0'
+  compile 'com.google.dagger:dagger:2.0'
+  compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
+  compile 'com.squareup.okhttp:okhttp:2.3.0'
+  compile 'org.apache.commons:commons-lang3:3.4'
+
+  testCompile 'junit:junit:4.12'
+  testCompile "org.mockito:mockito-core:1.9.5"
+  androidTestCompile "org.mockito:mockito-core:1.9.5"
+  androidTestCompile "com.google.dexmaker:dexmaker:1.0"
+  androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.0"
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
+  androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+}
+
+def increaseVersion() {
+  def Properties versionProps = new Properties()
+
+  def file = file('version.properties')
+  versionProps.load(new FileInputStream(file))
+
+  def nextCode = versionProps['VERSION_CODE'].toInteger() + 1;
+  versionProps['VERSION_CODE'] = nextCode.toString()
+  versionProps.store(file.newWriter(), null)
+}
+
+assembleRelease << {
+  increaseVersion()
+}

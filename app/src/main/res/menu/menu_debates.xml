@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="io.kaif.mobile.view.DebatesActivity">
+    <item
+            android:id="@+id/action_open_link"
+            android:icon="@drawable/ic_open_in_browser"
+            android:title="@string/action_open_link"
+            android:orderInCategory="100"
+            app:showAsAction="ifRoom"/>
+</menu>

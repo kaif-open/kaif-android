@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                tools:ignore="RtlHardcoded">
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/votes_layout"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+        <io.kaif.mobile.view.widget.VoteArticleButton
+                android:layout_width="40dp"
+                android:layout_height="24dp"
+                android:id="@+id/vote"
+                android:contentDescription="vote icon"
+                tools:ignore="HardcodedText"/>
+
+        <io.kaif.mobile.view.widget.ArticleScoreTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="99"
+                android:gravity="center"
+                android:minEms="1"
+                android:textAlignment="center"
+                android:layout_marginTop="4dp"
+                android:id="@+id/vote_count"
+                tools:ignore="HardcodedText"/>
+    </LinearLayout>
+
+
+    <TextView
+            android:id="@+id/title"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/votes_layout"
+            />
+
+    <TextView
+            android:id="@+id/link"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/title"
+            android:singleLine="true"
+            android:layout_below="@id/title"
+            />
+
+    <TextView
+            android:id="@+id/debate_count"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/title"
+            android:layout_below="@id/link"
+            android:layout_marginTop="4dp"
+            />
+
+    <TextView
+            android:id="@+id/author_name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/debate_count"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/debate_count"
+            />
+
+    <TextView
+            android:id="@+id/zone"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/debate_count"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/author_name"
+            />
+</RelativeLayout>

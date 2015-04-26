@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.kaif.mobile.BuildConfig;
 import io.kaif.mobile.model.Zone;
 import io.kaif.mobile.service.ZoneService;
 import rx.Observable;
@@ -18,7 +19,15 @@ public class ZoneDaemon {
   }
 
   public Observable<List<Zone>> listAll() {
-    return zoneService.listAll();
+
+    Observable<List<Zone>> result = zoneService.listAll();
+    if (BuildConfig.DEBUG) {
+      return result.map(zones -> {
+        zones.add(new Zone("test", "測試專區"));
+        return zones;
+      });
+    }
+    return result;
   }
 
 }

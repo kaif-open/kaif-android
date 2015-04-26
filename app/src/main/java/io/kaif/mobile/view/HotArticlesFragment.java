@@ -71,8 +71,8 @@ public class HotArticlesFragment extends BaseFragment {
     adapter = new ArticleListAdapter(articleDaemon,
         item -> startActivity(DebatesActivity.DebatesActivityIntent.create(getActivity(), item)));
     articleListView.setAdapter(adapter);
-    articleListView.getItemAnimator().setChangeDuration(0);
-    articleListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+    articleListView.getItemAnimator().setChangeDuration(120);
+    articleListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override
       public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         if (loadingNextPage) {

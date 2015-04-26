@@ -70,7 +70,7 @@ public class DebatesFragment extends BaseFragment {
         (debateId, level) -> ReplyDialog.createFragment(article.getArticleId(), debateId, level)
             .show(getFragmentManager(), "fragment_reply"));
     debateListView.setAdapter(adapter);
-    debateListView.getItemAnimator().setChangeDuration(0);
+    debateListView.getItemAnimator().setChangeDuration(120);
 
     pullToRefreshLayout.setOnRefreshListener(this::refreshDebates);
     pullToRefreshLayout.setRefreshing(true);

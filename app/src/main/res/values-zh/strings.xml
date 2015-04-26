@@ -29,4 +29,7 @@
     <string name="sign_in_processing">登入中…</string>
     <string name="submit_failed">送出失敗</string>
     <string name="submit_success">送出成功</string>
+    <string name="url_exist">該連結已經有人分享了</string>
+    <string name="warning">提醒</string>
+    <string name="force_create">還是要分享</string>
 </resources>

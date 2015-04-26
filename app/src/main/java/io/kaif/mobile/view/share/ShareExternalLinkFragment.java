@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,12 +24,20 @@ import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
 import io.kaif.mobile.model.Zone;
+import io.kaif.mobile.model.exception.DuplicateArticleUrlException;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
 import io.kaif.mobile.view.daemon.ZoneDaemon;
 import rx.android.widget.OnTextChangeEvent;
 import rx.android.widget.WidgetObservable;
 
 public class ShareExternalLinkFragment extends BaseFragment {
+
+  public static ShareExternalLinkFragment newInstance() {
+    ShareExternalLinkFragment fragment = new ShareExternalLinkFragment();
+    Bundle args = new Bundle();
+    fragment.setArguments(args);
+    return fragment;
+  }
 
   @InjectView(R.id.title)
   EditText titleEditText;
@@ -45,12 +54,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
   @Inject
   ZoneDaemon zoneDaemon;
 
-  public static ShareExternalLinkFragment newInstance() {
-    ShareExternalLinkFragment fragment = new ShareExternalLinkFragment();
-    Bundle args = new Bundle();
-    fragment.setArguments(args);
-    return fragment;
-  }
+  private Pattern urlPattern = Pattern.compile(".*(http[^\\s]+).*");
 
   public ShareExternalLinkFragment() {
     // Required empty public constructor
@@ -60,8 +64,9 @@ public class ShareExternalLinkFragment extends BaseFragment {
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.menu_share, menu);
     MenuItem shareBtn = menu.findItem(R.id.action_share);
+    shareBtn.setEnabled(false);
 
-    bind(WidgetObservable.text(titleEditText)).map(OnTextChangeEvent::text)
+    bind(WidgetObservable.text(titleEditText, true)).map(OnTextChangeEvent::text)
         .map(t -> t.length() >= 3)
         .distinctUntilChanged()
         .subscribe(shareBtn::setEnabled);
@@ -70,23 +75,36 @@ public class ShareExternalLinkFragment extends BaseFragment {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == R.id.action_share) {
-      submitArticle(item);
+      createArticle(false);
       return true;
     }
     return super.onOptionsItemSelected(item);
   }
 
-  private void submitArticle(MenuItem item) {
-    item.setEnabled(false);
+  private void createArticle(boolean forceCreate) {
     bind(articleDaemon.createExternalLink(urlEditText.getText().toString(),
         titleEditText.getText().toString(),
-        (String) zoneNameSpinner.getSelectedItem())).subscribe(aVoid -> {
-      item.setEnabled(true);
-      getActivity().finish();
-    }, throwable -> {
+        (String) zoneNameSpinner.getSelectedItem(),
+        forceCreate)).subscribe(aVoid -> getActivity().finish(), throwable -> {
+      if (throwable instanceof DuplicateArticleUrlException) {
+        notifyDuplicatePostAndResend();
+        return;
+      }
       Toast.makeText(getActivity(), throwable.toString(), Toast.LENGTH_SHORT).show();
-      item.setEnabled(true);
     });
+  }
+
+  private void notifyDuplicatePostAndResend() {
+    new AlertDialog.Builder(getActivity()).setTitle(R.string.warning)
+        .setMessage(R.string.url_exist)
+        .setPositiveButton(R.string.force_create, (dialog, whichButton) -> {
+          createArticle(true);
+        })
+        .setNegativeButton(R.string.dialog_cancel, (dialog, whichButton) -> {
+
+        })
+        .create()
+        .show();
   }
 
   @Override
@@ -108,12 +126,13 @@ public class ShareExternalLinkFragment extends BaseFragment {
   }
 
   private void setupView() {
+
   }
 
   private void fillContent() {
     Bundle bundle = getActivity().getIntent().getExtras();
     String rawUrl = bundle.getString(Intent.EXTRA_TEXT);
-    Matcher matcher = Pattern.compile(".*(http[^\\s]+).*").matcher(rawUrl);
+    Matcher matcher = urlPattern.matcher(rawUrl);
     if (matcher.matches()) {
       String cleanUrl = matcher.group(1);
       String subject = bundle.getString(Intent.EXTRA_SUBJECT);
@@ -127,7 +146,6 @@ public class ShareExternalLinkFragment extends BaseFragment {
       for (Zone zone : zones) {
         zoneAdapter.add(zone.getName());
       }
-
       zoneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       zoneNameSpinner.setAdapter(zoneAdapter);
     }, throwable -> {

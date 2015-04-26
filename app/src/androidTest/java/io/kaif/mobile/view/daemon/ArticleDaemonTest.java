@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -27,6 +28,7 @@ import io.kaif.mobile.model.Debate;
 import io.kaif.mobile.model.DebateNode;
 import io.kaif.mobile.model.LocalDebate;
 import io.kaif.mobile.model.Vote;
+import io.kaif.mobile.model.exception.DuplicateArticleUrlException;
 import io.kaif.mobile.service.ArticleService;
 import io.kaif.mobile.service.CommaSeparatedParam;
 import io.kaif.mobile.service.DebateService;
@@ -259,6 +261,73 @@ public class ArticleDaemonTest extends AndroidTestCase implements ModelFixture {
     LocalDebate localDebate = f1.await(3, TimeUnit.SECONDS).getLocalDebate();
     String localId = f2.await(3, TimeUnit.SECONDS).getLocalId();
     assertEquals(localDebate.getLocalDebateId(), localId);
+  }
+
+  public void testCreateExternalLink_duplicate() {
+    when(mockArticleService.exist("zone", "http://example.com")).thenReturn(Observable.just(true));
+    try {
+      daemon.createExternalLink("http://example.com", "title", "zone", false).toBlocking().single();
+      fail("expect duplicate post exception");
+    } catch (Exception e) {
+      assertTrue(e.getCause() instanceof DuplicateArticleUrlException);
+    }
+  }
+
+  public void testCreateExternalLink_force_create() {
+
+    Article article = new Article("zone",
+        "pro",
+        UUID.randomUUID().toString(),
+        "title",
+        new Date(),
+        "http://example.com",
+        "content",
+        Article.ArticleType.EXTERNAL_LINK,
+        "bar",
+        0L,
+        0L);
+
+    when(mockArticleService.exist("zone", "http://example.com")).thenReturn(Observable.just(true));
+    when(mockArticleService.createExternalLink(new ArticleService.ExternalLinkEntry(
+        "http://example.com",
+        "title",
+        "zone"))).thenReturn(Observable.just(article));
+
+    Article result = daemon.createExternalLink("http://example.com", "title", "zone", true)
+        .toBlocking()
+        .single();
+
+    assertEquals(article.getArticleId(), result.getArticleId());
+    assertEquals(article.getTitle(), result.getTitle());
+    assertEquals(article.getZone(), result.getZone());
+    assertEquals(article.getLink(), result.getLink());
+  }
+
+  public void testCreateExternalLink() {
+
+    Article article = new Article("zone",
+        "pro",
+        UUID.randomUUID().toString(),
+        "title",
+        new Date(),
+        "http://example.com",
+        "content",
+        Article.ArticleType.EXTERNAL_LINK,
+        "bar",
+        0L,
+        0L);
+
+    when(mockArticleService.exist("zone", "http://example.com")).thenReturn(Observable.just(false));
+    when(mockArticleService.createExternalLink(new ArticleService.ExternalLinkEntry(
+        "http://example.com",
+        "title",
+        "zone"))).thenReturn(Observable.just(article));
+
+    Article result = daemon.createExternalLink("http://example.com", "title", "zone", false)
+        .toBlocking()
+        .single();
+
+    assertEquals(article.getArticleId(), result.getArticleId());
   }
 
   private static class Future<T> {

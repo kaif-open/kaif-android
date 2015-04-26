@@ -6,6 +6,7 @@ import io.kaif.mobile.model.Article;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.PUT;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -57,4 +58,7 @@ public interface ArticleService {
 
   @GET("/v1/article/hot")
   Observable<List<Article>> listHotArticles(@Query("start-article-id") String startArticleId);
+
+  @GET("/v1/article/zone/{zone}/external-link/exist")
+  Observable<Boolean> exist(@Path("zone") String zone, @Query("url") String url);
 }

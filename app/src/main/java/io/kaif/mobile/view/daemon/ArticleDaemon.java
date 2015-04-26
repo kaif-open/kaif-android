@@ -20,6 +20,7 @@ import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Debate;
 import io.kaif.mobile.model.DebateNode;
 import io.kaif.mobile.model.Vote;
+import io.kaif.mobile.model.exception.DuplicateArticleUrlException;
 import io.kaif.mobile.service.ArticleService;
 import io.kaif.mobile.service.CommaSeparatedParam;
 import io.kaif.mobile.service.DebateService;
@@ -33,11 +34,12 @@ import rx.subjects.PublishSubject;
 @Singleton
 public class ArticleDaemon {
 
+  private Context context;
+
   private final PublishSubject<ArticleEvent> subject;
 
   private final ArticleService articleService;
 
-  private Context context;
   private final VoteService voteService;
 
   private final DebateService debateService;
@@ -74,10 +76,22 @@ public class ArticleDaemon {
 
   public Observable<Article> createExternalLink(@NonNull String url,
       @NonNull String title,
-      @NonNull String zone) {
-    return articleService.createExternalLink(new ArticleService.ExternalLinkEntry(url,
+      @NonNull String zone,
+      boolean forceCreate) {
+    Observable<Void> checkObservable = Observable.just(null);
+    if (!forceCreate) {
+      checkObservable = articleService.exist(zone, url).flatMap(duplicate -> {
+        if (duplicate) {
+          return Observable.error(new DuplicateArticleUrlException());
+        }
+        return Observable.just(null);
+      });
+    }
+
+    return checkObservable.flatMap(aVoid -> articleService.createExternalLink(new ArticleService.ExternalLinkEntry(
+        url,
         title,
-        zone));
+        zone)));
   }
 
   public Observable<List<ArticleViewModel>> listHotArticles(String startArticleId) {
@@ -184,5 +198,4 @@ public class ArticleDaemon {
         .subscribe(debate -> subject.onNext(new CreateDebateSuccessEvent(localId, debate)),
             throwable -> subject.onNext(new CreateDebateFailedEvent(localId)));
   }
-
 }

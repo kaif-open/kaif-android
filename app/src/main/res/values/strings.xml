@@ -29,4 +29,7 @@
     <string name="sign_in_processing">Processing…</string>
     <string name="submit_failed">Submit failed</string>
     <string name="submit_success">Submit success</string>
+    <string name="url_exist">The url already shared</string>
+    <string name="warning">Warning</string>
+    <string name="force_create">Still share</string>
 </resources>

@@ -17,6 +17,8 @@
         <io.kaif.mobile.view.widget.VoteArticleButton
                 android:layout_width="40dp"
                 android:layout_height="24dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:id="@+id/vote"
                 android:contentDescription="vote icon"
                 tools:ignore="HardcodedText"/>

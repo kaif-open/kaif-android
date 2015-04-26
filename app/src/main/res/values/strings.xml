@@ -8,7 +8,7 @@
     <string name="not_sign_in_warning">尚未登入</string>
     <string name="password_not_match">帳號/密碼不合</string>
     <string name="prompt_password">密碼</string>
-    <string name="prompt_title">title</string>
+    <string name="prompt_title">Title</string>
     <string name="prompt_url">Url</string>
     <string name="prompt_username">帳戶名稱</string>
     <string name="prompt_zone">zone</string>
@@ -24,7 +24,7 @@
     <string name="reply">Reply</string>
     <string name="submit_reply">Submit</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="debate_too_shor">Debate content too short</string>
+    <string name="debate_too_short">Debate content too short</string>
     <string name="loading">Loading</string>
     <string name="sign_in_processing">Processing…</string>
     <string name="submit_failed">Submit failed</string>

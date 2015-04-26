@@ -8,10 +8,12 @@ import javax.inject.Inject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -37,9 +39,6 @@ public class ShareExternalLinkFragment extends BaseFragment {
   @InjectView(R.id.zone_name)
   Spinner zoneNameSpinner;
 
-  @InjectView(R.id.share_btn)
-  Button shareBtn;
-
   @Inject
   ArticleDaemon articleDaemon;
 
@@ -58,10 +57,44 @@ public class ShareExternalLinkFragment extends BaseFragment {
   }
 
   @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.menu_share, menu);
+    MenuItem shareBtn = menu.findItem(R.id.action_share);
+
+    bind(WidgetObservable.text(titleEditText)).map(OnTextChangeEvent::text)
+        .map(t -> t.length() >= 3)
+        .distinctUntilChanged()
+        .subscribe(shareBtn::setEnabled);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == R.id.action_share) {
+      submitArticle(item);
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  private void submitArticle(MenuItem item) {
+    item.setEnabled(false);
+    bind(articleDaemon.createExternalLink(urlEditText.getText().toString(),
+        titleEditText.getText().toString(),
+        (String) zoneNameSpinner.getSelectedItem())).subscribe(aVoid -> {
+      item.setEnabled(true);
+      getActivity().finish();
+    }, throwable -> {
+      Toast.makeText(getActivity(), throwable.toString(), Toast.LENGTH_SHORT).show();
+      item.setEnabled(true);
+    });
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState) {
 
+    setHasOptionsMenu(true);
     final View view = inflater.inflate(R.layout.fragment_share_external_link, container, false);
     ButterKnife.inject(this, view);
 
@@ -75,23 +108,6 @@ public class ShareExternalLinkFragment extends BaseFragment {
   }
 
   private void setupView() {
-    bind(WidgetObservable.text(titleEditText)).map(OnTextChangeEvent::text)
-        .map(t -> t.length() >= 3)
-        .distinctUntilChanged()
-        .subscribe(shareBtn::setEnabled);
-
-    shareBtn.setOnClickListener(v -> {
-      shareBtn.setEnabled(false);
-      bind(articleDaemon.createExternalLink(urlEditText.getText().toString(),
-          titleEditText.getText().toString(),
-          (String) zoneNameSpinner.getSelectedItem())).subscribe(aVoid -> {
-        shareBtn.setEnabled(true);
-        getActivity().finish();
-      }, throwable -> {
-        Toast.makeText(getActivity(), throwable.toString(), Toast.LENGTH_SHORT).show();
-        shareBtn.setEnabled(true);
-      });
-    });
   }
 
   private void fillContent() {
@@ -111,6 +127,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
       for (Zone zone : zones) {
         zoneAdapter.add(zone.getName());
       }
+
       zoneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       zoneNameSpinner.setAdapter(zoneAdapter);
     }, throwable -> {

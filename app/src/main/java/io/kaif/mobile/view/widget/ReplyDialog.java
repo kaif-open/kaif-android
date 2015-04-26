@@ -93,7 +93,7 @@ public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorAc
   private void submitDebate() {
     String debateContent = contentEditText.getText().toString().trim();
     if (debateContent.length() < MIN_CONTENT_SIZE) {
-      Toast.makeText(getActivity(), R.string.debate_too_shor, Toast.LENGTH_SHORT).show();
+      Toast.makeText(getActivity(), R.string.debate_too_short, Toast.LENGTH_SHORT).show();
       return;
     }
     articleDaemon.debate(getArticleId(), getParentDebateId(), getLevel(), debateContent);

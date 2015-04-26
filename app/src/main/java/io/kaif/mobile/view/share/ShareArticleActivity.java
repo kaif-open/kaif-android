@@ -3,16 +3,16 @@ package io.kaif.mobile.view.share;
 import javax.inject.Inject;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
+import io.kaif.mobile.app.BaseActivity;
 import io.kaif.mobile.view.daemon.AccountDaemon;
 
-public class ShareArticleActivity extends ActionBarActivity {
+public class ShareArticleActivity extends BaseActivity {
 
   @InjectView(R.id.tool_bar)
   Toolbar toolbar;

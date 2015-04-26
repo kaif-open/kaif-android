@@ -24,7 +24,7 @@
     <string name="reply">留言</string>
     <string name="submit_reply">送出</string>
     <string name="dialog_cancel">取消</string>
-    <string name="debate_too_shor">留言過短</string>
+    <string name="debate_too_short">留言過短</string>
     <string name="loading">載入中…</string>
     <string name="sign_in_processing">登入中…</string>
     <string name="submit_failed">送出失敗</string>

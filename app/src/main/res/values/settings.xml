@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="endpoint">https://kaif.io</string>
+    <string name="redirect_uri">[full redirect uri]</string>
+    <string name="redirect_uri_host">[host of redirect uri]</string>
+    <string name="redirect_uri_path_prefix">[path of redirect uri]</string>
+    <string name="redirect_uri_scheme">[scheme of redirect uri]</string>
+</resources>

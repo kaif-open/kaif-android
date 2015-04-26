@@ -30,7 +30,6 @@ android {
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
   signingConfigs {
-
     def Properties props = new Properties()
     props.load(new FileInputStream(file('../secret/password.properties')))
 
@@ -47,12 +46,19 @@ android {
   }
 
   buildTypes {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(file('../secret/api.properties')))
+
     debug {
       signingConfig signingConfigs.debug
+      buildConfigField 'String', 'CLIENT_ID', "\"" + props["CLIENT_ID"] + "\""
+      buildConfigField 'String', 'CLIENT_SECRET', "\"" + props["CLIENT_SECRET"] + "\""
     }
     release {
       signingConfig signingConfigs.release
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      buildConfigField 'String', 'CLIENT_ID', "\"" + props["CLIENT_ID"] + "\""
+      buildConfigField 'String', 'CLIENT_SECRET', "\"" + props["CLIENT_SECRET"] + "\""
     }
   }
 

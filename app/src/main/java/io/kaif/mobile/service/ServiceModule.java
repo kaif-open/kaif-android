@@ -96,8 +96,8 @@ public class ServiceModule {
   @Singleton
   public ApiConfiguration provideOauthConfiguration() {
     return new ApiConfiguration(application.getString(R.string.endpoint),
-        application.getString(R.string.client_id),
-        application.getString(R.string.client_secret),
+        BuildConfig.CLIENT_ID,
+        BuildConfig.CLIENT_SECRET,
         application.getString(R.string.redirect_uri));
   }
 

@@ -16,16 +16,15 @@ import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
-import io.kaif.mobile.event.article.VoteArticleSuccessEvent;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
-import io.kaif.mobile.view.viewmodel.ArticleViewModel;
+import io.kaif.mobile.view.viewmodel.DebateViewModel;
 import io.kaif.mobile.view.widget.OnScrollToLastListener;
 import rx.Observable;
 
-public class ArticlesFragment extends BaseFragment {
+public class LatestDebatesFragment extends BaseFragment {
 
-  @InjectView(R.id.article_list)
-  RecyclerView articleListView;
+  @InjectView(R.id.debate_list)
+  RecyclerView debateListView;
 
   @InjectView(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
@@ -33,20 +32,16 @@ public class ArticlesFragment extends BaseFragment {
   @Inject
   ArticleDaemon articleDaemon;
 
-  private final static String ARGUMENT_IS_HOT = "IS_HOT";
-
-  public static ArticlesFragment newInstance(boolean isHot) {
-    ArticlesFragment fragment = new ArticlesFragment();
+  public static LatestDebatesFragment newInstance() {
+    LatestDebatesFragment fragment = new LatestDebatesFragment();
     Bundle args = new Bundle();
-    args.putBoolean(ARGUMENT_IS_HOT, isHot);
     fragment.setArguments(args);
     return fragment;
   }
 
-  private ArticleListAdapter adapter;
-  private boolean isHot;
+  private LatestDebateListAdapter adapter;
 
-  public ArticlesFragment() {
+  public LatestDebatesFragment() {
     // Required empty public constructor
   }
 
@@ -54,35 +49,30 @@ public class ArticlesFragment extends BaseFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     KaifApplication.getInstance().beans().inject(this);
-    isHot = getArguments().getBoolean(ARGUMENT_IS_HOT);
-  }
-
-  private Observable<List<ArticleViewModel>> listArticles(String startArticleId) {
-    if (isHot) {
-      return articleDaemon.listHotArticles(startArticleId);
-    }
-    return articleDaemon.listLatestArticles(startArticleId);
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState) {
-    final View view = inflater.inflate(R.layout.fragment_articles, container, false);
+    final View view = inflater.inflate(R.layout.fragment_latest_debates, container, false);
     ButterKnife.inject(this, view);
     setupView();
-    loadFirstPage();
+    fillContent();
     return view;
+  }
+
+  private void fillContent() {
+    loadFirstPage();
   }
 
   private void setupView() {
     final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-    articleListView.setLayoutManager(linearLayoutManager);
-    adapter = new ArticleListAdapter(articleDaemon,
-        item -> startActivity(DebatesActivity.DebatesActivityIntent.create(getActivity(), item)));
-    articleListView.setAdapter(adapter);
-    articleListView.getItemAnimator().setChangeDuration(120);
-    articleListView.addOnScrollListener(new OnScrollToLastListener() {
+    debateListView.setLayoutManager(linearLayoutManager);
+    adapter = new LatestDebateListAdapter();
+    debateListView.setAdapter(adapter);
+    debateListView.getItemAnimator().setChangeDuration(120);
+    debateListView.addOnScrollListener(new OnScrollToLastListener() {
       private boolean loadingNextPage = false;
 
       @Override
@@ -91,19 +81,19 @@ public class ArticlesFragment extends BaseFragment {
           return;
         }
         loadingNextPage = true;
-        bind(listArticles(adapter.getLastArticleId())).subscribe(adapter::addAll, throwable -> {
+        bind(listDebates(adapter.getLastDebateId())).subscribe(adapter::addAll, throwable -> {
         }, () -> loadingNextPage = false);
       }
     });
     pullToRefreshLayout.setOnRefreshListener(this::loadFirstPage);
-    bind(articleDaemon.getSubject(VoteArticleSuccessEvent.class)).subscribe(event -> {
-      adapter.updateVote(event.getArticleId(), event.getVoteState());
-    });
   }
 
   private void loadFirstPage() {
-    bind(listArticles(null)).subscribe(adapter::refresh, throwable -> {
+    bind(listDebates(null)).subscribe(adapter::refresh, throwable -> {
     }, () -> pullToRefreshLayout.setRefreshing(false));
   }
 
+  private Observable<List<DebateViewModel>> listDebates(String startDebateId) {
+    return articleDaemon.listLatestDebates(startDebateId);
+  }
 }

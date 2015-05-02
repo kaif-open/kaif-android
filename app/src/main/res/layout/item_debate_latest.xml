@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <RelativeLayout
+            android:id="@+id/header"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <include
+                layout="@layout/item_debate_header"
+                android:id="@+id/debate_header"/>
+
+        <TextView
+                android:layout_below="@id/debate_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:id="@+id/zone"/>
+    </RelativeLayout>
+
+    <View
+            android:layout_below="@id/header"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/code_gray"
+            />
+</RelativeLayout>

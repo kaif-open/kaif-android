@@ -50,6 +50,8 @@ public interface Beans {
 
   void inject(LoginActivity loginActivity);
 
+  void inject(LatestDebatesFragment latestDebatesFragment);
+
   final class Initializer {
 
     public static Beans init(Application application) {
@@ -60,5 +62,4 @@ public interface Beans {
     }
 
   }
-
 }

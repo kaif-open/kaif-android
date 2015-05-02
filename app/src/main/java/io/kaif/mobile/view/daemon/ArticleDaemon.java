@@ -94,6 +94,15 @@ public class ArticleDaemon {
         zone)));
   }
 
+  public Observable<List<DebateViewModel>> listLatestDebates(String startDebateId) {
+    return debateService.listLatestDebates(startDebateId).flatMap(debates -> {
+      final List<String> ids = mapDebatesToIds(debates);
+      return voteService.listDebateVotes(CommaSeparatedParam.of(ids))
+          .map(votes -> new Pair<>(debates, votes))
+          .map(this::mapToDebateViewModel);
+    });
+  }
+
   public Observable<List<ArticleViewModel>> listHotArticles(String startArticleId) {
     return articleService.listHotArticles(startArticleId).flatMap(articles -> {
       List<String> ids = mapArticlesToIds(articles);

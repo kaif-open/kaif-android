@@ -1,58 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:ignore="RtlHardcoded">
+                android:layout_height="wrap_content">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/info_layout"
-            android:orientation="horizontal">
+    <include
+            layout="@layout/item_debate_header"
+            android:id="@+id/debate_header"/>
 
-        <TextView
-                android:id="@+id/debater_name"
-                android:textColor="@color/info_gray"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <TextView
-                android:id="@+id/vote_score"
-                android:textColor="@color/info_gray"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginLeft="8dp"
-                android:background="@drawable/score_border"
-                tools:text="12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <TextView
-                android:id="@+id/last_update_time"
-                android:textColor="@color/info_gray"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginLeft="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-
-    <TextView
-            android:id="@+id/content"
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/info_layout"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:lineSpacingMultiplier="1.2"
-            />
 
     <io.kaif.mobile.view.widget.DebateActions
-            android:layout_below="@id/content"
+            android:layout_below="@id/debate_header"
             android:id="@+id/debate_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

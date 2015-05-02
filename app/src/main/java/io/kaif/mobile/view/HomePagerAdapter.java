@@ -24,8 +24,11 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
   public Fragment getItem(int position) {
     if (position == 0) {
       return ArticlesFragment.newInstance(true);
+    } else if (position == 1) {
+      return ArticlesFragment.newInstance(false);
+    } else {
+      return LatestDebatesFragment.newInstance();
     }
-    return ArticlesFragment.newInstance(false);
   }
 
   @Override

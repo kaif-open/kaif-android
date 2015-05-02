@@ -19,9 +19,9 @@ import io.kaif.mobile.view.util.Views;
 
 public class DebateActions extends LinearLayout {
 
-  public static final int BUTTON_SIZE_DP = 40;
+  public static final int BUTTON_SIZE_DP = 24;
 
-  public static final int BUTTON_PADDING_DP = 12;
+  public static final int BUTTON_PADDING_DP = 3;
 
   private Vote.VoteState voteState;
 

@@ -64,4 +64,7 @@ public interface ArticleService {
 
   @GET("/v1/article/latest")
   Observable<List<Article>> listLatestArticles(@Query("start-article-id") String startArticleId);
+
+  @GET("/v1/article/{articleId}")
+  Observable<Article> loadArticle(@Path("articleId") String articleId);
 }

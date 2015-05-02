@@ -93,4 +93,8 @@ public class LatestDebateListAdapter extends RecyclerView.Adapter<RecyclerView.V
   public String getLastDebateId() {
     return debates.get(debates.size() - 1).getDebateId();
   }
+
+  public DebateViewModel getItem(int position) {
+    return debates.get(position);
+  }
 }

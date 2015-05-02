@@ -1,6 +1,7 @@
 package io.kaif.mobile.view.daemon;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -215,5 +216,14 @@ public class ArticleDaemon {
     debateService.debate(new DebateService.CreateDebateEntry(articleId, parentDebateId, content))
         .subscribe(debate -> subject.onNext(new CreateDebateSuccessEvent(localId, debate)),
             throwable -> subject.onNext(new CreateDebateFailedEvent(localId)));
+  }
+
+  public Observable<ArticleViewModel> loadArticle(String articleId) {
+    return articleService.loadArticle(articleId)
+        .flatMap(article -> voteService.listArticleVotes(CommaSeparatedParam.of(Collections.singletonList(
+            article.getArticleId())))
+            .map(votes -> new Pair<>(Collections.singletonList(article), votes))
+            .map(this::mapToViewModel)
+            .map(articleViewModels -> articleViewModels.get(0)));
   }
 }

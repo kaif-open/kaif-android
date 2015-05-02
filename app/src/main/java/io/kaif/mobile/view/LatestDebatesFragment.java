@@ -4,11 +4,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
@@ -85,7 +89,20 @@ public class LatestDebatesFragment extends BaseFragment {
         }, () -> loadingNextPage = false);
       }
     });
-    pullToRefreshLayout.setOnRefreshListener(this::loadFirstPage);
+    GestureDetectorCompat gestureDetector = new GestureDetectorCompat(getActivity(),
+        new OnItemClickListener());
+    debateListView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+      @Override
+      public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        return gestureDetector.onTouchEvent(e);
+      }
+
+      @Override
+      public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+      }
+    });
+    pullToRefreshLayout.setOnRefreshListener(LatestDebatesFragment.this::loadFirstPage);
   }
 
   private void loadFirstPage() {
@@ -95,5 +112,20 @@ public class LatestDebatesFragment extends BaseFragment {
 
   private Observable<List<DebateViewModel>> listDebates(String startDebateId) {
     return articleDaemon.listLatestDebates(startDebateId);
+  }
+
+  private class OnItemClickListener extends GestureDetector.SimpleOnGestureListener {
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+      View view = debateListView.findChildViewUnder(e.getX(), e.getY());
+      if (view == null) {
+        return false;
+      }
+      int position = debateListView.getChildAdapterPosition(view);
+      DebateViewModel debateViewModel = adapter.getItem(position);
+      Intent intent = DebatesActivity.DebatesActivityIntent.create(getActivity(), debateViewModel);
+      startActivity(intent);
+      return true;
+    }
   }
 }

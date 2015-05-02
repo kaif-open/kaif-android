@@ -26,6 +26,8 @@ import io.kaif.mobile.view.widget.ReplyDialog;
 
 public class DebatesFragment extends BaseFragment {
 
+  public static final String ARTICLE = "ARTICLE";
+  public static final String DEBATE_ID = "DEBATE_ID";
   @InjectView(R.id.debate_list)
   RecyclerView debateListView;
 
@@ -36,6 +38,16 @@ public class DebatesFragment extends BaseFragment {
   ArticleDaemon articleDaemon;
   private DebateListAdapter adapter;
   private ArticleViewModel article;
+
+  public static DebatesFragment newInstance(ArticleViewModel articleViewModel,
+      String anchorDebateId) {
+    DebatesFragment fragment = new DebatesFragment();
+    Bundle args = new Bundle();
+    args.putSerializable(ARTICLE, articleViewModel);
+    args.putString(DEBATE_ID, anchorDebateId);
+    fragment.setArguments(args);
+    return fragment;
+  }
 
   public DebatesFragment() {
   }
@@ -52,7 +64,7 @@ public class DebatesFragment extends BaseFragment {
       Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_debates, container, false);
     ButterKnife.inject(this, view);
-    article = DebatesActivity.DebatesActivityIntent.getArticle(getArguments());
+    article = (ArticleViewModel) getArguments().getSerializable(ARTICLE);
     setupView();
     fillContent();
     return view;

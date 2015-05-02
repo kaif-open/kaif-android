@@ -102,7 +102,12 @@ public class LatestDebatesFragment extends BaseFragment {
 
       }
     });
-    pullToRefreshLayout.setOnRefreshListener(LatestDebatesFragment.this::loadFirstPage);
+    pullToRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        LatestDebatesFragment.this.loadFirstPage();
+      }
+    });
   }
 
   private void loadFirstPage() {

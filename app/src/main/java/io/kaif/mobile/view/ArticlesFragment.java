@@ -32,8 +32,6 @@ public class ArticlesFragment extends BaseFragment {
   @Inject
   ArticleDaemon articleDaemon;
 
-  private boolean loadingNextPage = false;
-
   private final static String ARGUMENT_IS_HOT = "IS_HOT";
 
   public static ArticlesFragment newInstance(boolean isHot) {
@@ -72,39 +70,18 @@ public class ArticlesFragment extends BaseFragment {
     final View view = inflater.inflate(R.layout.fragment_articles, container, false);
     ButterKnife.inject(this, view);
     setupView();
-    fillContent();
-    return view;
-  }
-
-  private void fillContent() {
     loadFirstPage();
+    return view;
   }
 
   private void setupView() {
     final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     articleListView.setLayoutManager(linearLayoutManager);
-
     adapter = new ArticleListAdapter(articleDaemon,
         item -> startActivity(DebatesActivity.DebatesActivityIntent.create(getActivity(), item)));
     articleListView.setAdapter(adapter);
     articleListView.getItemAnimator().setChangeDuration(120);
-    articleListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override
-      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (loadingNextPage) {
-          return;
-        }
-        int visibleItemCount = linearLayoutManager.getChildCount();
-        int totalItemCount = linearLayoutManager.getItemCount();
-        int pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-
-        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-          loadingNextPage = true;
-          bind(listArticles(adapter.getLastArticleId())).subscribe(adapter::addAll, throwable -> {
-          }, () -> loadingNextPage = false);
-        }
-      }
-    });
+    articleListView.addOnScrollListener(new OnLoadMoreListener());
     pullToRefreshLayout.setOnRefreshListener(this::loadFirstPage);
     bind(articleDaemon.getSubject(VoteArticleSuccessEvent.class)).subscribe(event -> {
       adapter.updateVote(event.getArticleId(), event.getVoteState());
@@ -114,5 +91,28 @@ public class ArticlesFragment extends BaseFragment {
   private void loadFirstPage() {
     bind(listArticles(null)).subscribe(adapter::refresh, throwable -> {
     }, () -> pullToRefreshLayout.setRefreshing(false));
+  }
+
+  private class OnLoadMoreListener extends RecyclerView.OnScrollListener {
+
+    private boolean loadingNextPage = false;
+
+    @Override
+    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+      if (loadingNextPage) {
+        return;
+      }
+      LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+      int visibleItemCount = layoutManager.getChildCount();
+      int totalItemCount = layoutManager.getItemCount();
+      int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+
+      if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+        loadingNextPage = true;
+        bind(listArticles(adapter.getLastArticleId())).subscribe(adapter::addAll, throwable -> {
+        }, () -> loadingNextPage = false);
+      }
+    }
   }
 }

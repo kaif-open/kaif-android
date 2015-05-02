@@ -32,4 +32,7 @@
     <string name="url_exist">The url already shared</string>
     <string name="warning">Warning</string>
     <string name="force_create">Still share</string>
+    <string name="hot">HOT</string>
+    <string name="latest">NEW</string>
+    <string name="debate">DEBATES</string>
 </resources>

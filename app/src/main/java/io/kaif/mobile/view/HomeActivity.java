@@ -47,7 +47,7 @@ public class HomeActivity extends BaseActivity {
       final Fragment fragment = getSupportFragmentManager().findFragmentByTag("hot");
       if (fragment == null) {
         getSupportFragmentManager().beginTransaction()
-            .replace(R.id.container, HotArticlesFragment.newInstance(), "hot")
+            .replace(R.id.container, HomeFragment.newInstance(), "hot")
             .commit();
       }
     }

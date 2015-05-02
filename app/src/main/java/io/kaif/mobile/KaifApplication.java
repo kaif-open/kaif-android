@@ -13,7 +13,6 @@ public class KaifApplication extends Application {
     super.onCreate();
     INSTANCE = this;
     beans = Beans.Initializer.init(this);
-    beans.inject(this);
   }
 
   public static KaifApplication getInstance() {

@@ -32,4 +32,7 @@
     <string name="url_exist">該連結已經有人分享了</string>
     <string name="warning">提醒</string>
     <string name="force_create">還是要分享</string>
+    <string name="hot">綜合熱門</string>
+    <string name="latest">綜合最新</string>
+    <string name="debate">最新討論</string>
 </resources>

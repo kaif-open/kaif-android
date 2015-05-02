@@ -10,6 +10,7 @@ import io.kaif.mobile.util.UtilModule;
 import io.kaif.mobile.view.DebatesActivity;
 import io.kaif.mobile.view.DebatesFragment;
 import io.kaif.mobile.view.HomeActivity;
+import io.kaif.mobile.view.HomeFragment;
 import io.kaif.mobile.view.HotArticlesFragment;
 import io.kaif.mobile.view.LoginActivity;
 import io.kaif.mobile.view.share.ShareArticleActivity;
@@ -31,8 +32,6 @@ public interface Beans {
 
   void inject(ShareExternalLinkFragment fragment);
 
-  void inject(BaseFragment fragment);
-
   void inject(HotArticlesFragment fragment);
 
   void inject(DebatesActivity debatesActivity);
@@ -46,6 +45,8 @@ public interface Beans {
   void inject(DebateActions debateActions);
 
   void inject(ReplyDialog replyDialog);
+
+  void inject(HomeFragment homeFragment);
 
   final class Initializer {
 

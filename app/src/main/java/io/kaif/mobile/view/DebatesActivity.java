@@ -12,6 +12,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -69,6 +71,9 @@ public class DebatesActivity extends BaseActivity {
   @Inject
   ArticleDaemon articleDaemon;
 
+  @InjectView(R.id.loading)
+  ProgressBar loading;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -95,18 +100,20 @@ public class DebatesActivity extends BaseActivity {
     }
 
     final String articleId = DebatesActivityIntent.getArticleId(getIntent().getExtras());
+    loading.setVisibility(View.VISIBLE);
+    setTitle(R.string.loading);
     bind(articleDaemon.loadArticle(articleId)).subscribe(articleViewModel -> {
       article = articleViewModel;
       createDebatesFragment(true);
     }, throwable -> {
       Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
       finish();
-    });
+    }, () -> loading.setVisibility(View.GONE));
   }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
-    outState.putSerializable("ARTICLE", article);
+    outState.putSerializable(ARTICLE_KEY, article);
     super.onSaveInstanceState(outState);
   }
 

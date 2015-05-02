@@ -122,7 +122,10 @@ public class LatestDebatesFragment extends BaseFragment {
         return false;
       }
       int position = debateListView.getChildAdapterPosition(view);
-      DebateViewModel debateViewModel = adapter.getItem(position);
+      DebateViewModel debateViewModel = adapter.findItem(position);
+      if (debateViewModel == null) {
+        return false;
+      }
       Intent intent = DebatesActivity.DebatesActivityIntent.create(getActivity(), debateViewModel);
       startActivity(intent);
       return true;

@@ -52,6 +52,8 @@ public class LatestDebateListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   private final List<DebateViewModel> debates;
 
+  private boolean hasNextPage;
+
   public LatestDebateListAdapter() {
     this.debates = new ArrayList<>();
   }
@@ -59,16 +61,26 @@ public class LatestDebateListAdapter extends RecyclerView.Adapter<RecyclerView.V
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+    if (viewType == R.layout.item_loading) {
+      return new RecyclerView.ViewHolder(view) {
+      };
+    }
     return new DebateViewHolder(view);
   }
 
   @Override
   public int getItemViewType(int position) {
+    if (position >= debates.size()) {
+      return R.layout.item_loading;
+    }
     return R.layout.item_debate_latest;
   }
 
   @Override
   public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (position >= debates.size()) {
+      return;
+    }
     DebateViewModel debateVm = debates.get(position);
     DebateViewHolder debateViewHolder = (DebateViewHolder) holder;
     debateViewHolder.update(debateVm);
@@ -76,16 +88,21 @@ public class LatestDebateListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   @Override
   public int getItemCount() {
-    return debates.size();
+    return debates.size() + (hasNextPage ? 1 : 0);
   }
 
   public void refresh(List<DebateViewModel> debates) {
     this.debates.clear();
     this.debates.addAll(debates);
+    hasNextPage = true;
     notifyDataSetChanged();
   }
 
   public void addAll(List<DebateViewModel> debates) {
+    if (debates.isEmpty()) {
+      hasNextPage = false;
+      return;
+    }
     this.debates.addAll(debates);
     notifyItemRangeInserted(this.debates.size() - debates.size(), debates.size());
   }
@@ -94,7 +111,10 @@ public class LatestDebateListAdapter extends RecyclerView.Adapter<RecyclerView.V
     return debates.get(debates.size() - 1).getDebateId();
   }
 
-  public DebateViewModel getItem(int position) {
+  public DebateViewModel findItem(int position) {
+    if (position >= debates.size()) {
+      return null;
+    }
     return debates.get(position);
   }
 }

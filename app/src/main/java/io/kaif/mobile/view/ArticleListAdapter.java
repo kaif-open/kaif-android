@@ -31,13 +31,6 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     void onItemVoteClick(View view, Vote.VoteState from, Vote.VoteState to);
   }
 
-  static class LoadingViewHolder extends RecyclerView.ViewHolder {
-
-    public LoadingViewHolder(View itemView) {
-      super(itemView);
-    }
-  }
-
   static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
     @InjectView(R.id.vote)
@@ -106,8 +99,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
     if (viewType == R.layout.item_loading) {
-      return new LoadingViewHolder(LayoutInflater.from(viewGroup.getContext())
-          .inflate(viewType, viewGroup, false));
+      return new RecyclerView.ViewHolder(LayoutInflater.from(viewGroup.getContext())
+          .inflate(viewType, viewGroup, false)) {
+      };
     }
 
     final ArticleViewHolder viewHolder = new ArticleViewHolder(LayoutInflater.from(viewGroup.getContext())

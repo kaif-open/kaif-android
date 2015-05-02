@@ -23,9 +23,9 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
   @Override
   public Fragment getItem(int position) {
     if (position == 0) {
-      return HotArticlesFragment.newInstance(true);
+      return ArticlesFragment.newInstance(true);
     }
-    return HotArticlesFragment.newInstance(false);
+    return ArticlesFragment.newInstance(false);
   }
 
   @Override

@@ -4,14 +4,14 @@ import javax.inject.Singleton;
 
 import android.app.Application;
 import dagger.Component;
-import io.kaif.mobile.app.BaseFragment;
 import io.kaif.mobile.service.ServiceModule;
 import io.kaif.mobile.util.UtilModule;
+import io.kaif.mobile.view.ArticlesFragment;
 import io.kaif.mobile.view.DebatesActivity;
 import io.kaif.mobile.view.DebatesFragment;
 import io.kaif.mobile.view.HomeActivity;
 import io.kaif.mobile.view.HomeFragment;
-import io.kaif.mobile.view.HotArticlesFragment;
+import io.kaif.mobile.view.LatestDebatesFragment;
 import io.kaif.mobile.view.LoginActivity;
 import io.kaif.mobile.view.share.ShareArticleActivity;
 import io.kaif.mobile.view.share.ShareExternalLinkFragment;
@@ -32,7 +32,7 @@ public interface Beans {
 
   void inject(ShareExternalLinkFragment fragment);
 
-  void inject(HotArticlesFragment fragment);
+  void inject(ArticlesFragment fragment);
 
   void inject(DebatesActivity debatesActivity);
 
@@ -48,6 +48,8 @@ public interface Beans {
 
   void inject(HomeFragment homeFragment);
 
+  void inject(LoginActivity loginActivity);
+
   final class Initializer {
 
     public static Beans init(Application application) {
@@ -59,5 +61,4 @@ public interface Beans {
 
   }
 
-  void inject(LoginActivity loginActivity);
 }

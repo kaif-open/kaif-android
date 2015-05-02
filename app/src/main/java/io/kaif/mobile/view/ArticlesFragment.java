@@ -21,7 +21,7 @@ import io.kaif.mobile.view.daemon.ArticleDaemon;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;
 import rx.Observable;
 
-public class HotArticlesFragment extends BaseFragment {
+public class ArticlesFragment extends BaseFragment {
 
   @InjectView(R.id.article_list)
   RecyclerView articleListView;
@@ -36,8 +36,8 @@ public class HotArticlesFragment extends BaseFragment {
 
   private final static String ARGUMENT_IS_HOT = "IS_HOT";
 
-  public static HotArticlesFragment newInstance(boolean isHot) {
-    HotArticlesFragment fragment = new HotArticlesFragment();
+  public static ArticlesFragment newInstance(boolean isHot) {
+    ArticlesFragment fragment = new ArticlesFragment();
     Bundle args = new Bundle();
     args.putBoolean(ARGUMENT_IS_HOT, isHot);
     fragment.setArguments(args);
@@ -47,7 +47,7 @@ public class HotArticlesFragment extends BaseFragment {
   private ArticleListAdapter adapter;
   private boolean isHot;
 
-  public HotArticlesFragment() {
+  public ArticlesFragment() {
     // Required empty public constructor
   }
 
@@ -69,7 +69,7 @@ public class HotArticlesFragment extends BaseFragment {
   public View onCreateView(LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState) {
-    final View view = inflater.inflate(R.layout.fragment_hot_articles, container, false);
+    final View view = inflater.inflate(R.layout.fragment_articles, container, false);
     ButterKnife.inject(this, view);
     setupView();
     fillContent();
@@ -101,7 +101,7 @@ public class HotArticlesFragment extends BaseFragment {
         if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
           loadingNextPage = true;
           bind(listArticles(adapter.getLastArticleId())).subscribe(adapter::addAll, throwable -> {
-              }, () -> loadingNextPage = false);
+          }, () -> loadingNextPage = false);
         }
       }
     });

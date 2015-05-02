@@ -38,7 +38,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
   }
 
-  static abstract class ArticleViewHolder extends RecyclerView.ViewHolder {
+  static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
     @InjectView(R.id.vote)
     public VoteArticleButton vote;
@@ -69,6 +69,13 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       debateCount.setText(context.getString(R.string.debate_count, article.getDebateCount()));
       zone.setText(article.getZoneTitle());
       authorName.setText(article.getAuthorName());
+      if (article.getArticleType() == Article.ArticleType.EXTERNAL_LINK) {
+        link.setText("(" + Uri.parse(article.getLink()).getAuthority() + ")");
+      } else {
+        link.setText("("
+            + itemView.getContext().getString(R.string.zone_path, article.getZone())
+            + ")");
+      }
     }
 
     void setOnItemVoteClickListener(OnItemVoteClickListener onItemVoteClickListener) {
@@ -83,42 +90,12 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
   }
 
-  static class LinkArticleViewHolder extends ArticleViewHolder {
-
-    public LinkArticleViewHolder(View itemView) {
-      super(itemView);
-    }
-
-    public void update(ArticleViewModel article) {
-      super.update(article);
-      link.setText("(" + Uri.parse(article.getLink()).getAuthority() + ")");
-    }
-
-  }
-
-  static class SelfArticleViewHolder extends ArticleViewHolder {
-
-    public SelfArticleViewHolder(View itemView) {
-      super(itemView);
-    }
-
-    public void update(ArticleViewModel article) {
-      super.update(article);
-      link.setText("("
-          + itemView.getContext().getString(R.string.zone_path, article.getZone())
-          + ")");
-    }
-
-  }
-
   private final List<ArticleViewModel> articles;
 
   private ArticleDaemon articleDaemon;
   private final OnItemClickListener onItemClickListener;
 
   private boolean hasNextPage;
-
-  private static final int TYPE_NEXT_PAGE = 999;
 
   public ArticleListAdapter(ArticleDaemon articleDaemon, OnItemClickListener onItemClickListener) {
     this.articleDaemon = articleDaemon;
@@ -128,19 +105,13 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-    if (viewType == TYPE_NEXT_PAGE) {
+    if (viewType == R.layout.item_loading) {
       return new LoadingViewHolder(LayoutInflater.from(viewGroup.getContext())
-          .inflate(R.layout.item_loading, viewGroup, false));
+          .inflate(viewType, viewGroup, false));
     }
 
-    final ArticleViewHolder viewHolder;
-    if (viewType == Article.ArticleType.EXTERNAL_LINK.ordinal()) {
-      viewHolder = new LinkArticleViewHolder(LayoutInflater.from(viewGroup.getContext())
-          .inflate(R.layout.item_article, viewGroup, false));
-    } else {
-      viewHolder = new SelfArticleViewHolder(LayoutInflater.from(viewGroup.getContext())
-          .inflate(R.layout.item_article, viewGroup, false));
-    }
+    final ArticleViewHolder viewHolder = new ArticleViewHolder(LayoutInflater.from(viewGroup.getContext())
+        .inflate(viewType, viewGroup, false));
 
     viewHolder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick((ArticleViewModel) v
         .getTag()));
@@ -178,9 +149,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   @Override
   public int getItemViewType(int position) {
     if (isLoadingView(position)) {
-      return TYPE_NEXT_PAGE;
+      return R.layout.item_loading;
     }
-    return getItemAtPosition(position).getArticleType().ordinal();
+    return R.layout.item_article;
   }
 
   private boolean isLoadingView(int position) {

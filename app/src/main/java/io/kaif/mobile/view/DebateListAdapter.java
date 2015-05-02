@@ -299,4 +299,14 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
       }
     }
   }
+
+  public int findPositionByDebateId(String debateId) {
+    for (int i = 0; i < debates.size(); i++) {
+      DebateViewModel debate = debates.get(i);
+      if (debate.getDebateId().equals(debateId)) {
+        return i + 1;
+      }
+    }
+    return RecyclerView.NO_POSITION;
+  }
 }

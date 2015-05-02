@@ -21,6 +21,7 @@ import io.kaif.mobile.event.article.CreateLocalDebateEvent;
 import io.kaif.mobile.event.article.VoteArticleSuccessEvent;
 import io.kaif.mobile.event.article.VoteDebateSuccessEvent;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.view.util.Views;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;
 import io.kaif.mobile.view.widget.ReplyDialog;
 
@@ -28,6 +29,7 @@ public class DebatesFragment extends BaseFragment {
 
   public static final String ARTICLE = "ARTICLE";
   public static final String DEBATE_ID = "DEBATE_ID";
+  public static final int AUTO_SCROLL_OFFSET_DP = 30;
   @InjectView(R.id.debate_list)
   RecyclerView debateListView;
 
@@ -111,10 +113,18 @@ public class DebatesFragment extends BaseFragment {
   }
 
   public void refreshDebates() {
-    bind(articleDaemon.listDebates(article.getArticleId())).subscribe(adapter::refresh,
-        throwable -> {
-        },
-        () -> pullToRefreshLayout.setRefreshing(false));
+    bind(articleDaemon.listDebates(article.getArticleId())).subscribe((debates) -> {
+      adapter.refresh(debates);
+      String anchorId = getArguments().getString(DEBATE_ID);
+      if (anchorId != null) {
+        int position = adapter.findPositionByDebateId(anchorId);
+        adapter.selectItem(position);
+        ((LinearLayoutManager) debateListView.getLayoutManager()).scrollToPositionWithOffset(
+            position,
+            (int) Views.convertDpToPixel(AUTO_SCROLL_OFFSET_DP, getActivity()));
+      }
+    }, throwable -> {
+    }, () -> pullToRefreshLayout.setRefreshing(false));
   }
 
 }

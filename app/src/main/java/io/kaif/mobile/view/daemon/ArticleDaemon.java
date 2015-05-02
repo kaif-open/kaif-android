@@ -103,6 +103,15 @@ public class ArticleDaemon {
     });
   }
 
+  public Observable<List<ArticleViewModel>> listLatestArticles(String startArticleId) {
+    return articleService.listLatestArticles(startArticleId).flatMap(articles -> {
+      List<String> ids = mapArticlesToIds(articles);
+      return voteService.listArticleVotes(CommaSeparatedParam.of(ids))
+          .map(votes -> new Pair<>(articles, votes))
+          .map(this::mapToViewModel);
+    });
+  }
+
   private List<ArticleViewModel> mapToViewModel(Pair<List<Article>, List<Vote>> articlesAndVotes) {
     final List<Article> articles = articlesAndVotes.first;
     final List<Vote> votes = articlesAndVotes.second;

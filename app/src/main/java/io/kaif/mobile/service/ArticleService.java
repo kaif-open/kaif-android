@@ -61,4 +61,7 @@ public interface ArticleService {
 
   @GET("/v1/article/zone/{zone}/external-link/exist")
   Observable<Boolean> exist(@Path("zone") String zone, @Query("url") String url);
+
+  @GET("/v1/article/latest")
+  Observable<List<Article>> listLatestArticles(@Query("start-article-id") String startArticleId);
 }

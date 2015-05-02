@@ -1,5 +1,7 @@
 package io.kaif.mobile.view;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
 import io.kaif.mobile.event.article.VoteArticleSuccessEvent;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.view.viewmodel.ArticleViewModel;
+import rx.Observable;
 
 public class HotArticlesFragment extends BaseFragment {
 
@@ -30,14 +34,18 @@ public class HotArticlesFragment extends BaseFragment {
 
   private boolean loadingNextPage = false;
 
-  public static HotArticlesFragment newInstance() {
+  private final static String ARGUMENT_IS_HOT = "IS_HOT";
+
+  public static HotArticlesFragment newInstance(boolean isHot) {
     HotArticlesFragment fragment = new HotArticlesFragment();
     Bundle args = new Bundle();
+    args.putBoolean(ARGUMENT_IS_HOT, isHot);
     fragment.setArguments(args);
     return fragment;
   }
 
   private ArticleListAdapter adapter;
+  private boolean isHot;
 
   public HotArticlesFragment() {
     // Required empty public constructor
@@ -47,6 +55,14 @@ public class HotArticlesFragment extends BaseFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     KaifApplication.getInstance().beans().inject(this);
+    isHot = getArguments().getBoolean(ARGUMENT_IS_HOT);
+  }
+
+  private Observable<List<ArticleViewModel>> listArticles(String startArticleId) {
+    if (isHot) {
+      return articleDaemon.listHotArticles(startArticleId);
+    }
+    return articleDaemon.listLatestArticles(startArticleId);
   }
 
   @Override
@@ -84,10 +100,8 @@ public class HotArticlesFragment extends BaseFragment {
 
         if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
           loadingNextPage = true;
-          bind(articleDaemon.listHotArticles(adapter.getLastArticleId())).subscribe(adapter::addAll,
-              throwable -> {
-              },
-              () -> loadingNextPage = false);
+          bind(listArticles(adapter.getLastArticleId())).subscribe(adapter::addAll, throwable -> {
+              }, () -> loadingNextPage = false);
         }
       }
     });
@@ -98,7 +112,7 @@ public class HotArticlesFragment extends BaseFragment {
   }
 
   private void loadFirstPage() {
-    bind(articleDaemon.listHotArticles(null)).subscribe(adapter::refresh, throwable -> {
+    bind(listArticles(null)).subscribe(adapter::refresh, throwable -> {
     }, () -> pullToRefreshLayout.setRefreshing(false));
   }
 }

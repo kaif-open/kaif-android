@@ -10,7 +10,6 @@ import com.squareup.okhttp.OkHttpClient;
 
 import android.app.Application;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import dagger.Module;
 import dagger.Provides;
 import io.kaif.mobile.BuildConfig;
@@ -30,8 +29,6 @@ public class ServiceModule {
   private final Application application;
 
   private static final int CACHE_SIZE = 10 * 1024 * 1024;
-
-  private static final int MAX_STALE = 60 * 60 * 24;
 
   public ServiceModule(Application application) {
     this.application = application;
@@ -84,11 +81,6 @@ public class ServiceModule {
         request.addHeader("Authorization", accountTokenInfo.getAuthorization());
         request.addHeader("Content-Type", "application/json;charset=UTF-8");
       }
-
-      final NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-      if (activeNetwork == null || !activeNetwork.isConnected()) {
-        request.addHeader("Cache-Control", "public, only-if-cached, max-stale=" + MAX_STALE);
-      }
     };
   }
 
@@ -137,9 +129,6 @@ public class ServiceModule {
     return okHttpClient;
   }
 
-  /**
-   * for debugging purpose
-   */
   @Provides
   @Singleton
   Cache provideOkHttpCache() {

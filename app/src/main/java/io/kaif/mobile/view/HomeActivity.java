@@ -74,8 +74,6 @@ public class HomeActivity extends BaseActivity {
     if (id == R.id.action_sign_out) {
       accountDaemon.signOut();
       return true;
-    } else if (id == R.id.action_settings) {
-      return true;
     }
 
     return super.onOptionsItemSelected(item);

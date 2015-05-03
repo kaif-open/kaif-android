@@ -67,4 +67,6 @@ public class Triangle extends Drawable {
   public void setColorFilter(ColorFilter cf) {
     paint.setColorFilter(cf);
   }
+
+
 }

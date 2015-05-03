@@ -3,6 +3,7 @@ package io.kaif.mobile.view;
 import javax.inject.Inject;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,8 @@ import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseActivity;
 import io.kaif.mobile.view.daemon.AccountDaemon;
+import io.kaif.mobile.view.graphics.drawable.Triangle;
+import io.kaif.mobile.view.util.Views;
 
 public class LoginActivity extends BaseActivity {
 
@@ -31,6 +34,9 @@ public class LoginActivity extends BaseActivity {
   @InjectView(R.id.sign_in_title)
   TextView signInTitle;
 
+  @InjectView(R.id.title)
+  TextView title;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -39,9 +45,13 @@ public class LoginActivity extends BaseActivity {
     ButterKnife.inject(this);
     KaifApplication.getInstance().beans().inject(this);
 
-    signInBtn.setOnClickListener(v -> {
-      startActivity(accountDaemon.createOauthPageIntent());
-    });
+    int triangleSize = (int) -title.getPaint().ascent();
+    Triangle triangle = new Triangle(getResources().getColor(R.color.vote_state_up), false);
+    triangle.setBounds(new Rect(0, 0, triangleSize, triangleSize));
+    title.setCompoundDrawables(triangle, null, null, null);
+    title.setCompoundDrawablePadding((int) Views.convertDpToPixel(16, this));
+
+    signInBtn.setOnClickListener(v -> startActivity(accountDaemon.createOauthPageIntent()));
   }
 
   @Override

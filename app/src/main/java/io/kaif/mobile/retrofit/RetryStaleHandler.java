@@ -9,7 +9,11 @@ import retrofit.http.GET;
 import rx.Observable;
 import rx.functions.Func1;
 
-class RetryHandler implements InvocationHandler {
+/**
+ * TODO
+ * Generate this using annotation processor
+ */
+class RetryStaleHandler implements InvocationHandler {
 
   private ConcurrentHashMap<Method, MethodInfo> methodCache;
 
@@ -17,7 +21,7 @@ class RetryHandler implements InvocationHandler {
 
   private Object target;
 
-  public RetryHandler(Object target) {
+  public RetryStaleHandler(Object target) {
     this.target = target;
     this.methodCache = new ConcurrentHashMap<>();
     this.retryMethodCache = new ConcurrentHashMap<>();
@@ -62,7 +66,7 @@ class RetryHandler implements InvocationHandler {
     Method targetMethod = retryMethodCache.get(method);
     if (targetMethod == null) {
       targetMethod = target.getClass()
-          .getMethod(method.getName() + "$$WithCacheRetry", method.getParameterTypes());
+          .getMethod(method.getName() + "$$RetryStale", method.getParameterTypes());
       retryMethodCache.putIfAbsent(method, targetMethod);
     }
     return targetMethod;

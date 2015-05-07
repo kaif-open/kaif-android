@@ -6,12 +6,16 @@ import javax.inject.Inject;
 
 import retrofit.RestAdapter;
 
-public class RetrofitCacheRetryProxy {
+/**
+ * TODO
+ * Generate this using annotation processor
+ */
+public class RetrofitRetryStaleProxy {
 
   @Inject
   RestAdapter restAdapter;
 
-  public RetrofitCacheRetryProxy(RestAdapter restAdapter) {
+  public RetrofitRetryStaleProxy(RestAdapter restAdapter) {
     this.restAdapter = restAdapter;
   }
 
@@ -19,8 +23,8 @@ public class RetrofitCacheRetryProxy {
     try {
       return serviceClass.cast(Proxy.newProxyInstance(serviceClass.getClassLoader(),
           new Class[] { serviceClass },
-          new RetryHandler(restAdapter.create(Class.forName(serviceClass.getName()
-              + "$$WithCacheRetry")))));
+          new RetryStaleHandler(restAdapter.create(Class.forName(serviceClass.getName()
+              + "$$RetryStale")))));
     } catch (ClassNotFoundException e) {
       return restAdapter.create(serviceClass);
     }

@@ -84,12 +84,14 @@ dependencies {
   retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:1.8.1'
 
   apt "com.google.dagger:dagger-compiler:2.0"
+  apt project(':retry-stale-processor')
 
   provided 'javax.annotation:jsr250-api:1.0'
 
   compile 'com.android.support:support-v4:22.1.1'
   compile 'com.android.support:appcompat-v7:22.1.1'
   compile 'com.android.support:recyclerview-v7:22.1.1'
+  compile 'io.reactivex:rxjava:1.0.10'
   compile 'io.reactivex:rxandroid:0.24.0'
   compile 'io.reactivex:rxandroid-framework:0.24.0'
   compile 'com.jakewharton:butterknife:6.1.0'

@@ -22,7 +22,7 @@ import retrofit.http.GET;
 import retrofit.http.Query;
 import rx.Observable;
 
-public class RetrofitCacheRetryProxyTest {
+public class RetrofitRetryStaleProxyTest {
 
   interface Foo {
     @GET("/foo")
@@ -51,7 +51,7 @@ public class RetrofitCacheRetryProxyTest {
   }
 
   @InjectMocks
-  private RetrofitCacheRetryProxy retrofitCacheRetryProxy;
+  private RetrofitRetryStaleProxy retrofitRetryStaleProxy;
 
   @Mock
   private RestAdapter mockAdapter;
@@ -69,7 +69,7 @@ public class RetrofitCacheRetryProxyTest {
     when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
     when(target.foo1("example")).thenReturn(Observable.just("success"));
 
-    Foo foo = retrofitCacheRetryProxy.create(Foo.class);
+    Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     assertEquals("success", foo.foo1("example").toBlocking().single());
     verify(target, never()).foo1$$WithCacheRetry("example");
   }
@@ -81,7 +81,7 @@ public class RetrofitCacheRetryProxyTest {
         new IOException("failed"))));
     when(target.foo1$$WithCacheRetry("example")).thenReturn(Observable.just("success"));
 
-    Foo foo = retrofitCacheRetryProxy.create(Foo.class);
+    Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     assertEquals("success", foo.foo1("example").toBlocking().single());
   }
 
@@ -91,7 +91,7 @@ public class RetrofitCacheRetryProxyTest {
     when(target.foo1("example")).thenReturn(Observable.error(RetrofitError.unexpectedError("/foo",
         new IllegalArgumentException("failed"))));
 
-    Foo foo = retrofitCacheRetryProxy.create(Foo.class);
+    Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     try {
       foo.foo1("example").toBlocking().single();
       fail();
@@ -107,7 +107,7 @@ public class RetrofitCacheRetryProxyTest {
     when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
     when(target.foo2("example")).thenReturn("success");
 
-    Foo foo = retrofitCacheRetryProxy.create(Foo.class);
+    Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     assertEquals("success", foo.foo2("example"));
   }
 
@@ -117,7 +117,7 @@ public class RetrofitCacheRetryProxyTest {
     when(target.foo3("example")).thenReturn(Observable.error(RetrofitError.networkError("/foo",
         new IOException("failed"))));
 
-    Foo foo = retrofitCacheRetryProxy.create(Foo.class);
+    Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     try {
       foo.foo3("example").toBlocking().single();
       fail();
@@ -137,7 +137,7 @@ public class RetrofitCacheRetryProxyTest {
         null,
         null)));
 
-    Foo foo = retrofitCacheRetryProxy.create(Foo.class);
+    Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     try {
       foo.foo1("example").toBlocking().single();
       fail();

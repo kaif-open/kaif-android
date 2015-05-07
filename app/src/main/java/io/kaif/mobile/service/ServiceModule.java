@@ -18,7 +18,7 @@ import io.kaif.mobile.config.ApiConfiguration;
 import io.kaif.mobile.json.ApiResponseDeserializer;
 import io.kaif.mobile.model.oauth.AccessTokenInfo;
 import io.kaif.mobile.model.oauth.AccessTokenManager;
-import io.kaif.mobile.retrofit.RetrofitCacheRetryProxy;
+import io.kaif.mobile.retrofit.RetrofitRetryStaleProxy;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -38,35 +38,35 @@ public class ServiceModule {
   @Provides
   @Singleton
   public AccountService provideAccountService(
-      @Named("apiRestAdapter") RetrofitCacheRetryProxy restAdapter) {
+      @Named("apiRestAdapter") RetrofitRetryStaleProxy restAdapter) {
     return restAdapter.create(AccountService.class);
   }
 
   @Provides
   @Singleton
   public ZoneService provideZoneService(
-      @Named("apiRestAdapter") RetrofitCacheRetryProxy restAdapter) {
+      @Named("apiRestAdapter") RetrofitRetryStaleProxy restAdapter) {
     return restAdapter.create(ZoneService.class);
   }
 
   @Provides
   @Singleton
   public VoteService provideVoteService(
-      @Named("apiRestAdapter") RetrofitCacheRetryProxy restAdapter) {
+      @Named("apiRestAdapter") RetrofitRetryStaleProxy restAdapter) {
     return restAdapter.create(VoteService.class);
   }
 
   @Provides
   @Singleton
   public DebateService provideDebateService(
-      @Named("apiRestAdapter") RetrofitCacheRetryProxy restAdapter) {
+      @Named("apiRestAdapter") RetrofitRetryStaleProxy restAdapter) {
     return restAdapter.create(DebateService.class);
   }
 
   @Provides
   @Singleton
   public ArticleService provideArticleService(
-      @Named("apiRestAdapter") RetrofitCacheRetryProxy restAdapter) {
+      @Named("apiRestAdapter") RetrofitRetryStaleProxy restAdapter) {
     return restAdapter.create(ArticleService.class);
   }
 
@@ -101,7 +101,7 @@ public class ServiceModule {
   @Provides
   @Named("apiRestAdapter")
   @Singleton
-  RetrofitCacheRetryProxy provideApiRestAdapter(RequestInterceptor interceptor,
+  RetrofitRetryStaleProxy provideApiRestAdapter(RequestInterceptor interceptor,
       ApiConfiguration apiConfiguration,
       OkHttpClient okHttpClient) {
 
@@ -109,7 +109,7 @@ public class ServiceModule {
     final Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(Object.class,
         new ApiResponseDeserializer()).create();
 
-    return new RetrofitCacheRetryProxy(new RestAdapter.Builder().setRequestInterceptor(interceptor)
+    return new RetrofitRetryStaleProxy(new RestAdapter.Builder().setRequestInterceptor(interceptor)
         .setEndpoint(apiConfiguration.getEndPoint())
         .setClient(new OkClient(okHttpClient))
         .setConverter(new GsonConverter(gson))

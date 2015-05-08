@@ -15,6 +15,7 @@ import javax.lang.model.type.TypeMirror;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
@@ -23,7 +24,7 @@ import retrofit.http.GET;
 import retrofit.http.Headers;
 import rx.Observable;
 
-public class MethodInfo {
+public class RetrofitServiceMethod {
 
   private final ExecutableElement methodElement;
 
@@ -31,7 +32,7 @@ public class MethodInfo {
 
   private static final String CACHE_STALE_HEADER = "Cache-Control: public, only-if-cached, max-stale=86400";
 
-  public MethodInfo(ExecutableElement methodElement) {
+  public RetrofitServiceMethod(ExecutableElement methodElement) {
     this.methodElement = methodElement;
     returnTypeMirror = methodElement.getReturnType();
   }
@@ -48,7 +49,6 @@ public class MethodInfo {
   private MethodSpec generateCode(boolean withRetryStaleHeader) {
 
     MethodSpec.Builder builder = MethodSpec.methodBuilder(getMethodName(withRetryStaleHeader));
-
     builder.addModifiers(Modifier.ABSTRACT).addModifiers(Modifier.PUBLIC);
     methodElement.getParameters().stream().map(variableElement -> {
       ParameterSpec.Builder parameterBuilder = ParameterSpec.builder(TypeName.get(variableElement.asType()),
@@ -66,12 +66,14 @@ public class MethodInfo {
         .collect(toList());
 
     if (withRetryStaleHeader) {
-      Optional<AnnotationSpec> header = annotationSpecs.stream().filter(this::isHeader).findAny();
+      Optional<AnnotationSpec> header = annotationSpecs.stream()
+          .filter(annotationSpec -> isHeaderAnnotation(annotationSpec))
+          .findAny();
       if (header.isPresent()) {
         annotationSpecs.forEach(annotationSpec -> {
-          if (isHeader(annotationSpec)) {
+          if (isHeaderAnnotation(annotationSpec)) {
             AnnotationSpec.Builder replace = AnnotationSpec.builder((ClassName) annotationSpec.type);
-            annotationSpec.members.forEach((s, codeBlocks) -> {
+            annotationSpec.members.forEach((String s, List<CodeBlock> codeBlocks) -> {
               codeBlocks.forEach(codeBlock -> {
                 replace.addMember(s, codeBlock);
               });
@@ -92,12 +94,7 @@ public class MethodInfo {
       annotationSpecs.forEach(builder::addAnnotation);
     }
 
-    TypeName returnTypeName = TypeName.get(returnTypeMirror);
-    return builder.returns(returnTypeName).build();
-  }
-
-  private boolean isHeader(AnnotationSpec annotationSpec) {
-    return annotationSpec.type.toString().equals(Headers.class.getCanonicalName());
+    return builder.returns(TypeName.get(returnTypeMirror)).build();
   }
 
   private String getMethodName(boolean withRetryStaleHeader) {
@@ -114,6 +111,10 @@ public class MethodInfo {
     String rawName = ((DeclaredType) returnTypeMirror).asElement().toString();
     return rawName.equals(Observable.class.getCanonicalName());
 
+  }
+
+  private static boolean isHeaderAnnotation(AnnotationSpec annotationSpec) {
+    return annotationSpec.type.toString().equals(Headers.class.getCanonicalName());
   }
 
 }

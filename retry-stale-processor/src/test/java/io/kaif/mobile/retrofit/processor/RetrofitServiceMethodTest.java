@@ -18,7 +18,7 @@ import retrofit.http.Headers;
 import retrofit.http.Query;
 import rx.Observable;
 
-public class MethodInfoTest {
+public class RetrofitServiceMethodTest {
   @Rule
   public final CompilationRule compilation = new CompilationRule();
 
@@ -47,13 +47,13 @@ public class MethodInfoTest {
 
   interface Foo6 {
     @GET("/hoge")
-    @Headers({"A: B", "C: D"})
+    @Headers({ "A: B", "C: D" })
     Observable<String> bar(List<String> hoge, int bar);
   }
 
-  io.kaif.mobile.retrofit.processor.MethodInfo singleMethodInfo(Class<?> clazz) {
+  RetrofitServiceMethod singleMethodInfo(Class<?> clazz) {
     TypeElement typeElement = compilation.getElements().getTypeElement(clazz.getCanonicalName());
-    return new io.kaif.mobile.retrofit.processor.MethodInfo(ElementFilter.methodsIn(typeElement.getEnclosedElements())
+    return new RetrofitServiceMethod(ElementFilter.methodsIn(typeElement.getEnclosedElements())
         .get(0));
   }
 
@@ -84,7 +84,10 @@ public class MethodInfoTest {
   public void generateCodeWithRetryStaleIfRequired_annotations() throws Exception {
     List<MethodSpec> methodSpecs = singleMethodInfo(Foo4.class).generateCodeWithRetryStaleIfRequired();
     assertEquals("@retrofit.http.GET(\"/hoge\")\n"
-            + "@retrofit.http.Headers({\n" + "    \"A: B\",\n" + "    \"C: D\"\n" + "})\n"
+            + "@retrofit.http.Headers({\n"
+            + "    \"A: B\",\n"
+            + "    \"C: D\"\n"
+            + "})\n"
             + "public abstract java.util.List<java.lang.String> bar(java.util.List<java.lang.String> arg0, @retrofit.http.Query(\"bar\") int arg1);",
         methodSpecs.get(0).toString().trim());
   }
@@ -110,5 +113,4 @@ public class MethodInfoTest {
             + "public abstract rx.Observable<java.lang.String> bar$$RetryStale(java.util.List<java.lang.String> arg0, int arg1);",
         methodSpecs.get(1).toString().trim());
   }
-
 }

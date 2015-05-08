@@ -34,7 +34,7 @@ public class RetrofitAnnotatedInterface {
     annotatedClassElement.getEnclosedElements()
         .stream()
         .filter(element -> element.getKind() == ElementKind.METHOD)
-        .map(element -> new MethodInfo((ExecutableElement) element))
+        .map(element -> new RetrofitServiceMethod((ExecutableElement) element))
         .flatMap(methodInfo -> methodInfo.generateCodeWithRetryStaleIfRequired().stream())
         .forEach(typeSpecBuilder::addMethod);
 

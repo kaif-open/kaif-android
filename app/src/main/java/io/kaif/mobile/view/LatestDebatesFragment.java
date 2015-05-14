@@ -27,6 +27,8 @@ import rx.Observable;
 
 public class LatestDebatesFragment extends BaseFragment {
 
+  public static final int RELOAD_EXPIRE_INTERVAL = 5 * 60 * 1000;
+
   @InjectView(R.id.debate_list)
   RecyclerView debateListView;
 
@@ -35,6 +37,8 @@ public class LatestDebatesFragment extends BaseFragment {
 
   @Inject
   ArticleDaemon articleDaemon;
+
+  private long leaveTime = 0;
 
   public static LatestDebatesFragment newInstance() {
     LatestDebatesFragment fragment = new LatestDebatesFragment();
@@ -62,12 +66,26 @@ public class LatestDebatesFragment extends BaseFragment {
     final View view = inflater.inflate(R.layout.fragment_latest_debates, container, false);
     ButterKnife.inject(this, view);
     setupView();
-    fillContent();
     return view;
   }
 
-  private void fillContent() {
-    loadFirstPage();
+  @Override
+  public void onResume() {
+    super.onResume();
+    reloadIfRequired();
+  }
+
+  @Override
+  public void onPause() {
+    leaveTime = System.currentTimeMillis();
+    super.onPause();
+  }
+
+  private void reloadIfRequired() {
+    if (System.currentTimeMillis() - leaveTime <= RELOAD_EXPIRE_INTERVAL) {
+      return;
+    }
+    reload();
   }
 
   private void setupView() {
@@ -102,15 +120,11 @@ public class LatestDebatesFragment extends BaseFragment {
 
       }
     });
-    pullToRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override
-      public void onRefresh() {
-        LatestDebatesFragment.this.loadFirstPage();
-      }
-    });
+    pullToRefreshLayout.setOnRefreshListener(LatestDebatesFragment.this::reload);
   }
 
-  private void loadFirstPage() {
+  private void reload() {
+    pullToRefreshLayout.setRefreshing(true);
     bind(listDebates(null)).subscribe(adapter::refresh, throwable -> {
     }, () -> pullToRefreshLayout.setRefreshing(false));
   }

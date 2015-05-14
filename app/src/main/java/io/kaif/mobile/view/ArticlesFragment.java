@@ -24,6 +24,8 @@ import rx.Observable;
 
 public class ArticlesFragment extends BaseFragment {
 
+  public static final int RELOAD_EXPIRE_INTERVAL = 5 * 60 * 1000;
+
   @InjectView(R.id.article_list)
   RecyclerView articleListView;
 
@@ -32,6 +34,8 @@ public class ArticlesFragment extends BaseFragment {
 
   @Inject
   ArticleDaemon articleDaemon;
+
+  private long leaveTime = 0;
 
   private final static String ARGUMENT_IS_HOT = "IS_HOT";
 
@@ -50,18 +54,18 @@ public class ArticlesFragment extends BaseFragment {
     // Required empty public constructor
   }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    KaifApplication.getInstance().beans().inject(this);
-    isHot = getArguments().getBoolean(ARGUMENT_IS_HOT);
-  }
-
   private Observable<List<ArticleViewModel>> listArticles(String startArticleId) {
     if (isHot) {
       return articleDaemon.listHotArticles(startArticleId);
     }
     return articleDaemon.listLatestArticles(startArticleId);
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    KaifApplication.getInstance().beans().inject(this);
+    isHot = getArguments().getBoolean(ARGUMENT_IS_HOT);
   }
 
   @Override
@@ -71,8 +75,26 @@ public class ArticlesFragment extends BaseFragment {
     final View view = inflater.inflate(R.layout.fragment_articles, container, false);
     ButterKnife.inject(this, view);
     setupView();
-    loadFirstPage();
     return view;
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    reloadIfRequired();
+  }
+
+  @Override
+  public void onPause() {
+    leaveTime = System.currentTimeMillis();
+    super.onPause();
+  }
+
+  private void reloadIfRequired() {
+    if (System.currentTimeMillis() - leaveTime <= RELOAD_EXPIRE_INTERVAL) {
+      return;
+    }
+    reload();
   }
 
   private void setupView() {
@@ -95,13 +117,14 @@ public class ArticlesFragment extends BaseFragment {
         }, () -> loadingNextPage = false);
       }
     });
-    pullToRefreshLayout.setOnRefreshListener(this::loadFirstPage);
+    pullToRefreshLayout.setOnRefreshListener(this::reload);
     bind(articleDaemon.getSubject(VoteArticleSuccessEvent.class)).subscribe(event -> {
       adapter.updateVote(event.getArticleId(), event.getVoteState());
     });
   }
 
-  private void loadFirstPage() {
+  private void reload() {
+    pullToRefreshLayout.setRefreshing(true);
     bind(listArticles(null)).subscribe(adapter::refresh, throwable -> {
     }, () -> pullToRefreshLayout.setRefreshing(false));
   }

@@ -53,13 +53,11 @@ public interface Beans {
   void inject(LatestDebatesFragment latestDebatesFragment);
 
   final class Initializer {
-
     public static Beans init(Application application) {
       return DaggerBeans.builder()
           .utilModule(new UtilModule(application))
           .serviceModule(new ServiceModule(application))
           .build();
     }
-
   }
 }

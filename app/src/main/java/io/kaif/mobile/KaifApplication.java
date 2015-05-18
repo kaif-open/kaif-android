@@ -1,5 +1,6 @@
 package io.kaif.mobile;
 
+
 import android.app.Application;
 
 public class KaifApplication extends Application {
@@ -21,6 +22,10 @@ public class KaifApplication extends Application {
 
   public Beans beans() {
     return beans;
+  }
+
+  public void setBeans(Beans beans) {
+    this.beans = beans;
   }
 
 }

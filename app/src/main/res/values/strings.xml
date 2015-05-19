@@ -35,4 +35,5 @@
     <string name="hot">HOT</string>
     <string name="latest">NEW</string>
     <string name="debate">DEBATES</string>
+    <string name="news_feed">News feed</string>
 </resources>

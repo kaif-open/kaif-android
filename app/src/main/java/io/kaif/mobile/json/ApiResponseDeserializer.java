@@ -9,10 +9,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 public class ApiResponseDeserializer implements JsonDeserializer<Object> {
+
+  private Gson gson;
+
+  public ApiResponseDeserializer(Gson gson) {
+    this.gson = gson;
+  }
+
   @Override
   public Object deserialize(JsonElement je, Type type, JsonDeserializationContext jdc)
       throws JsonParseException {
     JsonElement content = je.getAsJsonObject().get("data");
-    return new Gson().fromJson(content, type);
+    return gson.fromJson(content, type);
   }
 }

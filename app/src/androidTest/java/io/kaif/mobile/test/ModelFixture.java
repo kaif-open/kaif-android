@@ -1,7 +1,6 @@
 package io.kaif.mobile.test;
 
 import java.util.Date;
-import java.util.UUID;
 
 import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Debate;
@@ -10,7 +9,7 @@ import io.kaif.mobile.model.Vote;
 public interface ModelFixture {
 
   default Article article(String id) {
-    return new Article("programming",
+    return Article.of("programming",
         "pro",
         id,
         "aTitle",

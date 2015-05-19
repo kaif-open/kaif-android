@@ -16,6 +16,7 @@ import io.kaif.mobile.BuildConfig;
 import io.kaif.mobile.R;
 import io.kaif.mobile.config.ApiConfiguration;
 import io.kaif.mobile.json.ApiResponseDeserializer;
+import io.kaif.mobile.json.AutoParcelAdapterFactory;
 import io.kaif.mobile.model.oauth.AccessTokenInfo;
 import io.kaif.mobile.model.oauth.AccessTokenManager;
 import io.kaif.mobile.retrofit.RetrofitRetryStaleProxy;
@@ -33,6 +34,13 @@ public class ServiceModule {
 
   public ServiceModule(Application application) {
     this.application = application;
+  }
+
+  @Provides
+  @Singleton
+  public FeedService provideFeedService(
+      @Named("apiRestAdapter") RetrofitRetryStaleProxy restAdapter) {
+    return restAdapter.create(FeedService.class);
   }
 
   @Provides
@@ -106,13 +114,15 @@ public class ServiceModule {
       OkHttpClient okHttpClient) {
 
     //custom gson for api access
-    final Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(Object.class,
-        new ApiResponseDeserializer()).create();
+    final Gson autoParcelGson = new GsonBuilder().registerTypeAdapterFactory(new AutoParcelAdapterFactory())
+        .create();
+    final Gson restApiGson = new GsonBuilder().registerTypeHierarchyAdapter(Object.class,
+        new ApiResponseDeserializer(autoParcelGson)).create();
 
     return new RetrofitRetryStaleProxy(new RestAdapter.Builder().setRequestInterceptor(interceptor)
         .setEndpoint(apiConfiguration.getEndPoint())
         .setClient(new OkClient(okHttpClient))
-        .setConverter(new GsonConverter(gson))
+        .setConverter(new GsonConverter(restApiGson))
         .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
         .build());
   }

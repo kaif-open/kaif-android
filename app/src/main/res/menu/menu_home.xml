@@ -4,6 +4,13 @@
       tools:context="io.kaif.mobile.view.HomeActivity">
 
     <item
+            android:id="@+id/action_news_feed"
+            android:title="@string/news_feed"
+            android:icon="@drawable/ic_notifications_white"
+            android:orderInCategory="200"
+            app:showAsAction="ifRoom"/>
+
+    <item
             android:id="@+id/action_sign_out"
             android:title="@string/action_sign_out"
             android:orderInCategory="100"

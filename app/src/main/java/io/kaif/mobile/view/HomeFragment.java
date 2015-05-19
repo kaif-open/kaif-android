@@ -25,7 +25,6 @@ public class HomeFragment extends BaseFragment {
   ViewPager viewPager;
 
   public HomeFragment() {
-
   }
 
   @Override

@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -56,26 +54,5 @@ public class HomeActivity extends BaseActivity {
   private void showLoginActivityAndFinish() {
     startActivity(new Intent(this, LoginActivity.class));
     finish();
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_home, menu);
-    if (!accountDaemon.hasAccount()) {
-      menu.findItem(R.id.action_sign_out).setVisible(false);
-    }
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    int id = item.getItemId();
-    if (id == R.id.action_sign_out) {
-      accountDaemon.signOut();
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 }

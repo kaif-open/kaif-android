@@ -1,8 +1,13 @@
 package io.kaif.mobile.view;
 
+import javax.inject.Inject;
+
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
@@ -10,6 +15,9 @@ import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
+import io.kaif.mobile.view.daemon.AccountDaemon;
+import io.kaif.mobile.view.daemon.NewsFeedDaemon;
+import io.kaif.mobile.view.drawable.NewsFeedBadgeDrawable;
 import io.kaif.mobile.view.widget.SlidingTabLayout;
 
 public class HomeFragment extends BaseFragment {
@@ -24,6 +32,14 @@ public class HomeFragment extends BaseFragment {
   @InjectView(R.id.view_pager)
   ViewPager viewPager;
 
+  @Inject
+  AccountDaemon accountDaemon;
+
+  @Inject
+  NewsFeedDaemon newsFeedDaemon;
+
+  private NewsFeedBadgeDrawable newsFeedBadgeDrawable;
+
   public HomeFragment() {
   }
 
@@ -31,6 +47,37 @@ public class HomeFragment extends BaseFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     KaifApplication.getInstance().beans().inject(this);
+    setHasOptionsMenu(true);
+    newsFeedBadgeDrawable = new NewsFeedBadgeDrawable(getResources());
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    bind(newsFeedDaemon.newsUnreadCount()).subscribe(newsFeedBadgeDrawable::changeCount, ignoreEx -> {
+
+    });
+  }
+
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.menu_home, menu);
+    MenuItem newsFeedAction = menu.findItem(R.id.action_news_feed);
+    newsFeedAction.setIcon(newsFeedBadgeDrawable);
+    super.onCreateOptionsMenu(menu, inflater);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.action_sign_out) {
+      accountDaemon.signOut();
+      return true;
+    }
+    if (id == R.id.action_news_feed) {
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override

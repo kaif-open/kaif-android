@@ -23,16 +23,16 @@ public abstract class FeedAsset implements Parcelable, Serializable {
     return new AutoParcel_FeedAsset(assetId, assetType, createTime, acknowledged, debate);
   }
 
-  abstract String assetId();
+  public abstract String assetId();
 
-  abstract AssetType assetType();
+  public abstract AssetType assetType();
 
-  abstract Date createTime();
+  public abstract Date createTime();
 
-  abstract boolean acknowledged();
+  public abstract boolean acknowledged();
 
   @Nullable
-  abstract Debate debate();
+  public abstract Debate debate();
 
   @Override
   public boolean equals(Object o) {

@@ -13,6 +13,8 @@ import io.kaif.mobile.view.HomeActivity;
 import io.kaif.mobile.view.HomeFragment;
 import io.kaif.mobile.view.LatestDebatesFragment;
 import io.kaif.mobile.view.LoginActivity;
+import io.kaif.mobile.view.NewsFeedActivity;
+import io.kaif.mobile.view.NewsFeedActivityFragment;
 import io.kaif.mobile.view.share.ShareArticleActivity;
 import io.kaif.mobile.view.share.ShareExternalLinkFragment;
 import io.kaif.mobile.view.widget.ArticleScoreTextView;
@@ -60,4 +62,8 @@ public interface Beans {
           .build();
     }
   }
+
+  void inject(NewsFeedActivity newsFeedActivity);
+
+  void inject(NewsFeedActivityFragment newsFeedActivityFragment);
 }

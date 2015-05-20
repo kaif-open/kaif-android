@@ -23,6 +23,21 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".view.LoginActivity"
+                android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data
+                        android:host="@string/redirect_uri_host"
+                        android:pathPrefix="@string/redirect_uri_path_prefix"
+                        android:scheme="@string/redirect_uri_scheme"/>
+            </intent-filter>
+        </activity>
+        <activity
                 android:name=".view.share.ShareArticleActivity"
                 android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
@@ -41,19 +56,12 @@
                     android:value=".view.HomeActivity"/>
         </activity>
         <activity
-                android:name=".view.LoginActivity"
-                android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data
-                        android:host="@string/redirect_uri_host"
-                        android:pathPrefix="@string/redirect_uri_path_prefix"
-                        android:scheme="@string/redirect_uri_scheme"/>
-            </intent-filter>
+                android:name=".view.NewsFeedActivity"
+                android:label="@string/title_activity_news_feed"
+                android:parentActivityName=".view.HomeActivity">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".view.HomeActivity"/>
         </activity>
     </application>
 

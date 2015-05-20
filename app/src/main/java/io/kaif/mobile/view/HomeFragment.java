@@ -54,9 +54,10 @@ public class HomeFragment extends BaseFragment {
   @Override
   public void onResume() {
     super.onResume();
-    bind(newsFeedDaemon.newsUnreadCount()).subscribe(newsFeedBadgeDrawable::changeCount, ignoreEx -> {
+    bind(newsFeedDaemon.newsUnreadCount()).subscribe(newsFeedBadgeDrawable::changeCount,
+        ignoreEx -> {
 
-    });
+        });
   }
 
   @Override
@@ -75,6 +76,7 @@ public class HomeFragment extends BaseFragment {
       return true;
     }
     if (id == R.id.action_news_feed) {
+      startActivity(new NewsFeedActivity.NewsFeedActivityIntent(getActivity()));
       return true;
     }
     return super.onOptionsItemSelected(item);

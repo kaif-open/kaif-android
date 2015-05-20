@@ -94,7 +94,7 @@ public class LatestDebateListAdapter extends RecyclerView.Adapter<RecyclerView.V
   public void refresh(List<DebateViewModel> debates) {
     this.debates.clear();
     this.debates.addAll(debates);
-    hasNextPage = true;
+    hasNextPage = !debates.isEmpty();
     notifyDataSetChanged();
   }
 

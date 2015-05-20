@@ -168,9 +168,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   public void refresh(List<ArticleViewModel> articles) {
     this.articles.clear();
     this.articles.addAll(articles);
-    if (!articles.isEmpty()) {
-      hasNextPage = true;
-    }
+    hasNextPage = !articles.isEmpty();
     notifyDataSetChanged();
   }
 

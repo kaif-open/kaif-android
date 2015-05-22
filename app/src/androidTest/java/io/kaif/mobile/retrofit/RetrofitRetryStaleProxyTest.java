@@ -35,12 +35,12 @@ public class RetrofitRetryStaleProxyTest {
     Observable<String> foo3(@Query("bar") String bar);
   }
 
-  interface Foo$$WithCacheRetry {
+  interface Foo$$RetryStale {
     @GET("/foo")
     Observable<String> foo1(@Query("bar") String bar);
 
     @GET("/foo")
-    Observable<String> foo1$$WithCacheRetry(@Query("bar") String bar);
+    Observable<String> foo1$$RetryStale(@Query("bar") String bar);
 
     @GET("/foo")
     String foo2(@Query("bar") String bar);
@@ -57,7 +57,7 @@ public class RetrofitRetryStaleProxyTest {
   private RestAdapter mockAdapter;
 
   @Mock
-  private Foo$$WithCacheRetry target;
+  private Foo$$RetryStale target;
 
   @Before
   public void setup() {
@@ -66,20 +66,20 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_success() {
-    when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
+    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo1("example")).thenReturn(Observable.just("success"));
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     assertEquals("success", foo.foo1("example").toBlocking().single());
-    verify(target, never()).foo1$$WithCacheRetry("example");
+    verify(target, never()).foo1$$RetryStale("example");
   }
 
   @Test
   public void access_network_error() {
-    when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
+    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo1("example")).thenReturn(Observable.error(RetrofitError.networkError("/foo",
         new IOException("failed"))));
-    when(target.foo1$$WithCacheRetry("example")).thenReturn(Observable.just("success"));
+    when(target.foo1$$RetryStale("example")).thenReturn(Observable.just("success"));
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     assertEquals("success", foo.foo1("example").toBlocking().single());
@@ -87,7 +87,7 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_non_network_error() {
-    when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
+    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo1("example")).thenReturn(Observable.error(RetrofitError.unexpectedError("/foo",
         new IllegalArgumentException("failed"))));
 
@@ -99,12 +99,12 @@ public class RetrofitRetryStaleProxyTest {
       assertEquals(RetrofitError.Kind.UNEXPECTED, expected.getKind());
       assertTrue(expected.getCause() instanceof IllegalArgumentException);
     }
-    verify(target, never()).foo1$$WithCacheRetry("example");
+    verify(target, never()).foo1$$RetryStale("example");
   }
 
   @Test
   public void access_non_rx_method() {
-    when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
+    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo2("example")).thenReturn("success");
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
@@ -113,7 +113,7 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_no_cache_retry_method() {
-    when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
+    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo3("example")).thenReturn(Observable.error(RetrofitError.networkError("/foo",
         new IOException("failed"))));
 
@@ -128,10 +128,10 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_network_error_and_cache_miss() {
-    when(mockAdapter.create(Foo$$WithCacheRetry.class)).thenReturn(target);
+    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo1("example")).thenReturn(Observable.error(RetrofitError.networkError("/foo",
         new IOException("failed"))));
-    when(target.foo1$$WithCacheRetry("example")).thenReturn(Observable.error(RetrofitError.httpError(
+    when(target.foo1$$RetryStale("example")).thenReturn(Observable.error(RetrofitError.httpError(
         "/foo",
         new Response("/foo", 501, "stale", Collections.<Header>emptyList(), null),
         null,

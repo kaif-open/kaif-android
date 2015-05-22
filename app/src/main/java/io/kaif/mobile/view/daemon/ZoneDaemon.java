@@ -3,12 +3,14 @@ package io.kaif.mobile.view.daemon;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.kaif.mobile.BuildConfig;
 import io.kaif.mobile.model.Zone;
 import io.kaif.mobile.service.ZoneService;
 import rx.Observable;
 
+@Singleton
 public class ZoneDaemon {
 
   private final ZoneService zoneService;

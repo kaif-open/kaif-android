@@ -11,30 +11,70 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
+import javax.inject.Inject;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
+import android.app.Instrumentation;
 import android.content.Intent;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.net.Uri;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.intent.Intents;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.MediumTest;
+import io.kaif.mobile.DaggerTestBeans;
+import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
+import io.kaif.mobile.TestBeans;
+import io.kaif.mobile.view.daemon.AccountDaemon;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
 
+  @Inject
+  AccountDaemon accountDaemon;
+
   @Rule
-  public IntentsTestRule<LoginActivity> activityRule = new IntentsTestRule<>(LoginActivity.class);
+  public ActivityTestRule<LoginActivity> activityRule = new ActivityTestRule<>(LoginActivity.class,
+      true,
+      false);
+
+  @Before
+  public void setUp() {
+    Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+    KaifApplication app = (KaifApplication) instrumentation.getTargetContext()
+        .getApplicationContext();
+    TestBeans beans = DaggerTestBeans.builder().build();
+    app.setBeans(beans);
+    beans.inject(this);
+    Intents.init();
+  }
+
+  @After
+  public void tearDown() {
+    Intents.release();
+  }
 
   @MediumTest
   @Test
   public void showOauthPage() {
 
+    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foo.com"));
+
+    Mockito.when(accountDaemon.createOauthPageIntent()).thenReturn(intent);
+
+    activityRule.launchActivity(new Intent());
+
     onView(withId(R.id.sign_in)).perform(click());
 
     intended(allOf(hasAction(equalTo(Intent.ACTION_VIEW)),
-        hasData(hasHost(equalTo("kaif.io"))),
+        hasData(hasHost(equalTo("foo.com"))),
         toPackage("com.android.browser")));
   }
 

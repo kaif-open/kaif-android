@@ -1,6 +1,8 @@
-package io.kaif.mobile.event.article;
+package io.kaif.mobile.event.debate;
 
-public class CreateDebateFailedEvent extends ArticleEvent {
+import io.kaif.mobile.event.article.ArticleEvent;
+
+public class CreateDebateFailedEvent extends DebateEvent {
   private String localId;
 
   public CreateDebateFailedEvent(String localId) {

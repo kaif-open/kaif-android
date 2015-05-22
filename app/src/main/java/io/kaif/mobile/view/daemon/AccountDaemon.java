@@ -9,18 +9,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import io.kaif.mobile.config.ApiConfiguration;
+import io.kaif.mobile.event.EventPublishSubject;
 import io.kaif.mobile.event.account.AccountEvent;
 import io.kaif.mobile.event.account.SignInSuccessEvent;
 import io.kaif.mobile.event.account.SignOutEvent;
 import io.kaif.mobile.model.oauth.AccessTokenManager;
 import io.kaif.mobile.service.OauthService;
 import rx.Observable;
-import rx.subjects.PublishSubject;
 
 @Singleton
 public class AccountDaemon {
 
-  private final PublishSubject<AccountEvent> subject;
+  private final EventPublishSubject<AccountEvent> subject;
 
   private final OauthService oauthService;
 
@@ -37,22 +37,15 @@ public class AccountDaemon {
     this.oauthService = oauthService;
     this.accessTokenManager = accessTokenManager;
     this.apiConfiguration = apiConfiguration;
-    this.subject = PublishSubject.<AccountEvent>create();
+    this.subject = new EventPublishSubject<>();
   }
 
   public Observable<AccountEvent> getSubject(Class<?>... classes) {
-    return subject.asObservable().filter(accountEvent -> {
-      for (Class<?> clazz : classes) {
-        if (clazz.isInstance(accountEvent)) {
-          return true;
-        }
-      }
-      return false;
-    });
+    return subject.getSubject(classes);
   }
 
   public <T extends AccountEvent> Observable<T> getSubject(Class<T> clazz) {
-    return subject.asObservable().filter(clazz::isInstance).cast(clazz);
+    return subject.getSubject(clazz);
   }
 
   public Intent createOauthPageIntent() {

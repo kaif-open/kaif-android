@@ -1,8 +1,8 @@
-package io.kaif.mobile.event.article;
+package io.kaif.mobile.event.debate;
 
 import io.kaif.mobile.model.LocalDebate;
 
-public class CreateLocalDebateEvent extends ArticleEvent {
+public class CreateLocalDebateEvent extends DebateEvent {
   private LocalDebate localDebate;
 
   public CreateLocalDebateEvent(String articleId,

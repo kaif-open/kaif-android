@@ -10,12 +10,12 @@ import io.kaif.mobile.view.viewmodel.FeedAssetViewModel;
 import rx.Observable;
 
 @Singleton
-public class NewsFeedDaemon {
+public class FeedDaemon {
 
   private final FeedService feedService;
 
   @Inject
-  NewsFeedDaemon(FeedService feedService) {
+  FeedDaemon(FeedService feedService) {
     this.feedService = feedService;
   }
 

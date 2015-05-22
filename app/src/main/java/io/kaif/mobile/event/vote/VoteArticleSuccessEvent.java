@@ -1,18 +1,18 @@
-package io.kaif.mobile.event.article;
+package io.kaif.mobile.event.vote;
 
 import io.kaif.mobile.model.Vote;
 
-public class VoteDebateSuccessEvent extends ArticleEvent {
-  private final String debateId;
+public class VoteArticleSuccessEvent extends VoteEvent {
+  private final String articleId;
   private final Vote.VoteState voteState;
 
-  public VoteDebateSuccessEvent(String debateId, Vote.VoteState voteState) {
-    this.debateId = debateId;
+  public VoteArticleSuccessEvent(String articleId, Vote.VoteState voteState) {
+    this.articleId = articleId;
     this.voteState = voteState;
   }
 
-  public String getDebateId() {
-    return debateId;
+  public String getArticleId() {
+    return articleId;
   }
 
   public Vote.VoteState getVoteState() {
@@ -22,7 +22,7 @@ public class VoteDebateSuccessEvent extends ArticleEvent {
   @Override
   public String toString() {
     return "VoteArticleSuccessEvent{" +
-        "debateId='" + debateId + '\'' +
+        "articleId='" + articleId + '\'' +
         ", voteState=" + voteState +
         '}';
   }
@@ -36,9 +36,9 @@ public class VoteDebateSuccessEvent extends ArticleEvent {
       return false;
     }
 
-    VoteDebateSuccessEvent that = (VoteDebateSuccessEvent) o;
+    VoteArticleSuccessEvent that = (VoteArticleSuccessEvent) o;
 
-    if (!debateId.equals(that.debateId)) {
+    if (!articleId.equals(that.articleId)) {
       return false;
     }
     return voteState == that.voteState;
@@ -47,7 +47,7 @@ public class VoteDebateSuccessEvent extends ArticleEvent {
 
   @Override
   public int hashCode() {
-    int result = debateId.hashCode();
+    int result = articleId.hashCode();
     result = 31 * result + voteState.hashCode();
     return result;
   }

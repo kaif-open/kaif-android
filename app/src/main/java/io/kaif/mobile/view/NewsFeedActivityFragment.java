@@ -17,7 +17,7 @@ import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
-import io.kaif.mobile.view.daemon.NewsFeedDaemon;
+import io.kaif.mobile.view.daemon.FeedDaemon;
 import io.kaif.mobile.view.viewmodel.FeedAssetViewModel;
 import io.kaif.mobile.view.widget.OnScrollToLastListener;
 import rx.Observable;
@@ -31,7 +31,7 @@ public class NewsFeedActivityFragment extends BaseFragment {
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
-  NewsFeedDaemon newsFeedDaemon;
+  FeedDaemon feedDaemon;
 
   private NewsFeedListAdapter adapter;
 
@@ -89,8 +89,8 @@ public class NewsFeedActivityFragment extends BaseFragment {
 
   private Observable<List<FeedAssetViewModel>> listFeedAssets(String feedAssetId) {
     if (TextUtils.isEmpty(feedAssetId)) {
-      return newsFeedDaemon.listAndAcknowledgeIfRequired();
+      return feedDaemon.listAndAcknowledgeIfRequired();
     }
-    return newsFeedDaemon.listNewsFeed(feedAssetId);
+    return feedDaemon.listNewsFeed(feedAssetId);
   }
 }

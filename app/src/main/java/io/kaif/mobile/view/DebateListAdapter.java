@@ -31,6 +31,7 @@ import io.kaif.mobile.kmark.KmarkProcessor;
 import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Vote;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.view.daemon.VoteDaemon;
 import io.kaif.mobile.view.graphics.drawable.LevelDrawable;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;
 import io.kaif.mobile.view.viewmodel.DebateViewModel;
@@ -189,17 +190,17 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
   private final List<DebateViewModel> debates;
   private final ArticleViewModel article;
-  private final ArticleDaemon articleDaemon;
+  private final VoteDaemon voteDaemon;
   private int selectedPosition = RecyclerView.NO_POSITION;
   private final OnReplyClickListener onReplyClickListener;
 
   public DebateListAdapter(ArticleViewModel article,
-      ArticleDaemon articleDaemon,
+      VoteDaemon voteDaemon,
       OnReplyClickListener onReplyClickListener) {
     this.onReplyClickListener = onReplyClickListener;
     this.debates = new ArrayList<>();
     this.article = article;
-    this.articleDaemon = articleDaemon;
+    this.voteDaemon = voteDaemon;
   }
 
   @Override
@@ -227,7 +228,7 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
       articleViewHolder.update(article);
       articleViewHolder.setOnReplyClickListener(v -> onReplyClickListener.onReplyClicked(null, 1));
       articleViewHolder.setOnVoteClickListener((from,
-          to) -> articleDaemon.voteArticle(article.getArticleId(), from, to));
+          to) -> voteDaemon.voteArticle(article.getArticleId(), from, to));
       return;
     }
     DebateViewModel debateVm = debates.get(position - 1);
@@ -236,7 +237,7 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     debateViewHolder.setOnReplyClickListener(v -> onReplyClickListener.onReplyClicked(debateVm.getDebateId(),
         debateVm.getLevel() + 1));
     debateViewHolder.setOnVoteClickListener((from,
-        to) -> articleDaemon.voteDebate(debateVm.getDebateId(), from, to));
+        to) -> voteDaemon.voteDebate(debateVm.getDebateId(), from, to));
     holder.itemView.setOnClickListener(v -> selectItem(holder.getAdapterPosition()));
   }
 

@@ -14,13 +14,14 @@ import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
-import io.kaif.mobile.event.article.ArticleEvent;
-import io.kaif.mobile.event.article.CreateDebateFailedEvent;
-import io.kaif.mobile.event.article.CreateDebateSuccessEvent;
-import io.kaif.mobile.event.article.CreateLocalDebateEvent;
-import io.kaif.mobile.event.article.VoteArticleSuccessEvent;
-import io.kaif.mobile.event.article.VoteDebateSuccessEvent;
-import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.event.debate.CreateDebateFailedEvent;
+import io.kaif.mobile.event.debate.CreateDebateSuccessEvent;
+import io.kaif.mobile.event.debate.CreateLocalDebateEvent;
+import io.kaif.mobile.event.debate.DebateEvent;
+import io.kaif.mobile.event.vote.VoteArticleSuccessEvent;
+import io.kaif.mobile.event.vote.VoteDebateSuccessEvent;
+import io.kaif.mobile.view.daemon.DebateDaemon;
+import io.kaif.mobile.view.daemon.VoteDaemon;
 import io.kaif.mobile.view.util.Views;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;
 import io.kaif.mobile.view.widget.ReplyDialog;
@@ -37,7 +38,11 @@ public class DebatesFragment extends BaseFragment {
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
-  ArticleDaemon articleDaemon;
+  DebateDaemon debateDaemon;
+
+  @Inject
+  VoteDaemon voteDaemon;
+
   private DebateListAdapter adapter;
   private ArticleViewModel article;
 
@@ -80,7 +85,7 @@ public class DebatesFragment extends BaseFragment {
     final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     debateListView.setLayoutManager(linearLayoutManager);
     adapter = new DebateListAdapter(article,
-        articleDaemon,
+        voteDaemon,
         (debateId, level) -> ReplyDialog.createFragment(article.getArticleId(), debateId, level)
             .show(getFragmentManager(), "fragment_reply"));
     debateListView.setAdapter(adapter);
@@ -88,32 +93,32 @@ public class DebatesFragment extends BaseFragment {
 
     pullToRefreshLayout.setOnRefreshListener(this::refreshDebates);
     pullToRefreshLayout.setRefreshing(true);
-    bind(articleDaemon.getSubject(VoteArticleSuccessEvent.class,
-        VoteDebateSuccessEvent.class)).subscribe(event -> {
-      if (event instanceof VoteArticleSuccessEvent) {
-        VoteArticleSuccessEvent articleSuccessEvent = (VoteArticleSuccessEvent) event;
-        adapter.updateArticleVote(articleSuccessEvent.getArticleId(),
-            articleSuccessEvent.getVoteState());
-      } else if (event instanceof VoteDebateSuccessEvent) {
-        VoteDebateSuccessEvent debateSuccessEvent = (VoteDebateSuccessEvent) event;
-        adapter.updateDebateVote(debateSuccessEvent.getDebateId(),
-            debateSuccessEvent.getVoteState());
-      }
-    });
+    bind(voteDaemon.getSubject(VoteArticleSuccessEvent.class, VoteDebateSuccessEvent.class)).
+        subscribe(event -> {
+          if (event instanceof VoteArticleSuccessEvent) {
+            VoteArticleSuccessEvent articleSuccessEvent = (VoteArticleSuccessEvent) event;
+            adapter.updateArticleVote(articleSuccessEvent.getArticleId(),
+                articleSuccessEvent.getVoteState());
+          } else if (event instanceof VoteDebateSuccessEvent) {
+            VoteDebateSuccessEvent debateSuccessEvent = (VoteDebateSuccessEvent) event;
+            adapter.updateDebateVote(debateSuccessEvent.getDebateId(),
+                debateSuccessEvent.getVoteState());
+          }
+        });
 
-    bind(articleDaemon.getSubject(CreateLocalDebateEvent.class,
+    bind(debateDaemon.getSubject(CreateLocalDebateEvent.class,
         CreateDebateSuccessEvent.class,
         CreateDebateFailedEvent.class)).subscribe(this::processDebateEvent);
   }
 
-  private void processDebateEvent(ArticleEvent event) {
+  private void processDebateEvent(DebateEvent event) {
     if (event instanceof CreateDebateSuccessEvent) {
       refreshDebates();
     }
   }
 
   public void refreshDebates() {
-    bind(articleDaemon.listDebates(article.getArticleId())).subscribe((debates) -> {
+    bind(debateDaemon.listDebates(article.getArticleId())).subscribe((debates) -> {
       adapter.refresh(debates);
       String anchorId = getArguments().getString(DEBATE_ID);
       if (anchorId != null) {

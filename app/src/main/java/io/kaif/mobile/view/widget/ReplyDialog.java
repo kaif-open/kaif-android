@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
-import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.view.daemon.DebateDaemon;
 import rx.android.app.support.RxDialogFragment;
 
 public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorActionListener {
@@ -48,7 +48,7 @@ public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorAc
   }
 
   @Inject
-  ArticleDaemon articleDaemon;
+  DebateDaemon debateDaemon;
 
   @InjectView(R.id.debate_content)
   protected EditText contentEditText;
@@ -96,6 +96,6 @@ public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorAc
       Toast.makeText(getActivity(), R.string.debate_too_short, Toast.LENGTH_SHORT).show();
       return;
     }
-    articleDaemon.debate(getArticleId(), getParentDebateId(), getLevel(), debateContent);
+    debateDaemon.debate(getArticleId(), getParentDebateId(), getLevel(), debateContent);
   }
 }

@@ -20,7 +20,7 @@ import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
-import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.view.daemon.DebateDaemon;
 import io.kaif.mobile.view.viewmodel.DebateViewModel;
 import io.kaif.mobile.view.widget.OnScrollToLastListener;
 import rx.Observable;
@@ -36,7 +36,7 @@ public class LatestDebatesFragment extends BaseFragment {
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
-  ArticleDaemon articleDaemon;
+  DebateDaemon debateDaemon;
 
   private long leaveTime = 0;
 
@@ -130,7 +130,7 @@ public class LatestDebatesFragment extends BaseFragment {
   }
 
   private Observable<List<DebateViewModel>> listDebates(String startDebateId) {
-    return articleDaemon.listLatestDebates(startDebateId);
+    return debateDaemon.listLatestDebates(startDebateId);
   }
 
   private class OnItemClickListener extends GestureDetector.SimpleOnGestureListener {

@@ -17,6 +17,7 @@ import io.kaif.mobile.R;
 import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Vote;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.view.daemon.VoteDaemon;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;
 import io.kaif.mobile.view.widget.ArticleScoreTextView;
 import io.kaif.mobile.view.widget.VoteArticleButton;
@@ -86,12 +87,16 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   private final List<ArticleViewModel> articles;
 
   private ArticleDaemon articleDaemon;
+  private VoteDaemon voteDaemon;
   private final OnItemClickListener onItemClickListener;
 
   private boolean hasNextPage;
 
-  public ArticleListAdapter(ArticleDaemon articleDaemon, OnItemClickListener onItemClickListener) {
+  public ArticleListAdapter(ArticleDaemon articleDaemon,
+      VoteDaemon voteDaemon,
+      OnItemClickListener onItemClickListener) {
     this.articleDaemon = articleDaemon;
+    this.voteDaemon = voteDaemon;
     this.onItemClickListener = onItemClickListener;
     this.articles = new ArrayList<>();
   }
@@ -111,7 +116,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         .getTag()));
     viewHolder.setOnItemVoteClickListener((v,
         from,
-        to) -> articleDaemon.voteArticle(((ArticleViewModel) v.getTag()).getArticleId(), from, to));
+        to) -> voteDaemon.voteArticle(((ArticleViewModel) v.getTag()).getArticleId(), from, to));
     return viewHolder;
   }
 

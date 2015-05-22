@@ -16,7 +16,7 @@ import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
 import io.kaif.mobile.view.daemon.AccountDaemon;
-import io.kaif.mobile.view.daemon.NewsFeedDaemon;
+import io.kaif.mobile.view.daemon.FeedDaemon;
 import io.kaif.mobile.view.drawable.NewsFeedBadgeDrawable;
 import io.kaif.mobile.view.widget.SlidingTabLayout;
 
@@ -36,7 +36,7 @@ public class HomeFragment extends BaseFragment {
   AccountDaemon accountDaemon;
 
   @Inject
-  NewsFeedDaemon newsFeedDaemon;
+  FeedDaemon feedDaemon;
 
   private NewsFeedBadgeDrawable newsFeedBadgeDrawable;
 
@@ -54,7 +54,7 @@ public class HomeFragment extends BaseFragment {
   @Override
   public void onResume() {
     super.onResume();
-    bind(newsFeedDaemon.newsUnreadCount()).subscribe(newsFeedBadgeDrawable::changeCount,
+    bind(feedDaemon.newsUnreadCount()).subscribe(newsFeedBadgeDrawable::changeCount,
         ignoreEx -> {
 
         });

@@ -16,8 +16,9 @@ import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
-import io.kaif.mobile.event.article.VoteArticleSuccessEvent;
+import io.kaif.mobile.event.vote.VoteArticleSuccessEvent;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
+import io.kaif.mobile.view.daemon.VoteDaemon;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;
 import io.kaif.mobile.view.widget.OnScrollToLastListener;
 import rx.Observable;
@@ -34,6 +35,9 @@ public class ArticlesFragment extends BaseFragment {
 
   @Inject
   ArticleDaemon articleDaemon;
+
+  @Inject
+  VoteDaemon voteDaemon;
 
   private long leaveTime = 0;
 
@@ -101,6 +105,7 @@ public class ArticlesFragment extends BaseFragment {
     final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     articleListView.setLayoutManager(linearLayoutManager);
     adapter = new ArticleListAdapter(articleDaemon,
+        voteDaemon,
         item -> startActivity(DebatesActivity.DebatesActivityIntent.create(getActivity(), item)));
     articleListView.setAdapter(adapter);
     articleListView.getItemAnimator().setChangeDuration(120);
@@ -118,7 +123,7 @@ public class ArticlesFragment extends BaseFragment {
       }
     });
     pullToRefreshLayout.setOnRefreshListener(this::reload);
-    bind(articleDaemon.getSubject(VoteArticleSuccessEvent.class)).subscribe(event -> {
+    bind(voteDaemon.getSubject(VoteArticleSuccessEvent.class)).subscribe(event -> {
       adapter.updateVote(event.getArticleId(), event.getVoteState());
     });
   }

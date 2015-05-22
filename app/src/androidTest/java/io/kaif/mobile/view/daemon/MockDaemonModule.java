@@ -18,6 +18,12 @@ public class MockDaemonModule {
 
   @Provides
   @Singleton
+  DebateDaemon provideDebateDaemon() {
+    return Mockito.mock(DebateDaemon.class);
+  }
+
+  @Provides
+  @Singleton
   AccountDaemon provideAccountDaemon() {
     return Mockito.mock(AccountDaemon.class);
   }
@@ -26,5 +32,17 @@ public class MockDaemonModule {
   @Singleton
   ZoneDaemon provideZoneDaemon() {
     return Mockito.mock(ZoneDaemon.class);
+  }
+
+  @Provides
+  @Singleton
+  VoteDaemon provideVoteDaemon() {
+    return Mockito.mock(VoteDaemon.class);
+  }
+
+  @Provides
+  @Singleton
+  FeedDaemon provideNewsFeedDaemon() {
+    return Mockito.mock(FeedDaemon.class);
   }
 }

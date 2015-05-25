@@ -16,6 +16,9 @@
  */
 package io.kaif.mobile.kmark;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -37,8 +40,21 @@ import io.kaif.mobile.kmark.text.SuperscriptSpan2;
  */
 public class DefaultDecorator implements Decorator {
 
-  private int leading;
+  private static class NestSpanInfo {
+    int start;
+    int end;
+    int flag;
+    Object span;
 
+    public NestSpanInfo(Object span, int start, int end, int flag) {
+      this.start = start;
+      this.end = end;
+      this.flag = flag;
+      this.span = span;
+    }
+  }
+
+  private int leading;
   private int bulletGap;
   private int bulletRadius;
   private int codeBackgroundColor;
@@ -225,8 +241,22 @@ public class DefaultDecorator implements Decorator {
     int where = text.getSpanStart(obj);
     text.removeSpan(obj);
 
+    Object[] nestSpans = text.getSpans(where, len, Object.class);
+    List<NestSpanInfo> spans = new ArrayList<>();
+    for (Object nestSpan : nestSpans) {
+      int spanStart = text.getSpanStart(nestSpan);
+      int spanEnd = text.getSpanEnd(nestSpan);
+      int spanFlags = text.getSpanFlags(nestSpan);
+      text.removeSpan(nestSpan);
+      spans.add(new NestSpanInfo(nestSpan, spanStart, spanEnd, spanFlags));
+    }
+
     if (where != len) {
       text.setSpan(repl, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+    //reorder spans
+    for (NestSpanInfo span : spans) {
+      text.setSpan(span.span, span.start, span.end, span.flag);
     }
   }
 

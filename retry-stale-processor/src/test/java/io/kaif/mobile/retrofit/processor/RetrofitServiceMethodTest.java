@@ -96,7 +96,7 @@ public class RetrofitServiceMethodTest {
   public void generateCodeWithRetryStaleIfRequired_rx_get() throws Exception {
     List<MethodSpec> methodSpecs = singleMethodInfo(Foo5.class).generateCodeWithRetryStaleIfRequired();
     assertEquals("@retrofit.http.GET(\"/hoge\")\n"
-            + "@retrofit.http.Headers(\"Cache-Control: public, only-if-cached, max-stale=86400\")\n"
+            + "@retrofit.http.Headers(\"Cache-Control: max-stale=86400\")\n"
             + "public abstract rx.Observable<java.lang.String> bar$$RetryStale(java.util.List<java.lang.String> arg0, int arg1);",
         methodSpecs.get(1).toString().trim());
   }
@@ -108,7 +108,7 @@ public class RetrofitServiceMethodTest {
             + "@retrofit.http.Headers({\n"
             + "    \"A: B\",\n"
             + "    \"C: D\",\n"
-            + "    \"Cache-Control: public, only-if-cached, max-stale=86400\"\n"
+            + "    \"Cache-Control: max-stale=86400\"\n"
             + "})\n"
             + "public abstract rx.Observable<java.lang.String> bar$$RetryStale(java.util.List<java.lang.String> arg0, int arg1);",
         methodSpecs.get(1).toString().trim());

@@ -8,7 +8,7 @@ import javax.lang.model.element.TypeElement;
 
 import com.squareup.javapoet.TypeSpec;
 
-public class RetrofitAnnotatedInterface {
+public class RetrofitServiceInterface {
 
   public static final String RETRY_STALE_POSTFIX = "$$RetryStale";
 
@@ -22,7 +22,7 @@ public class RetrofitAnnotatedInterface {
     return annotatedClassElement.getQualifiedName() + RETRY_STALE_POSTFIX;
   }
 
-  public RetrofitAnnotatedInterface(TypeElement classElement) throws IllegalArgumentException {
+  public RetrofitServiceInterface(TypeElement classElement) throws IllegalArgumentException {
     this.annotatedClassElement = classElement;
   }
 

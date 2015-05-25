@@ -11,7 +11,6 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
@@ -28,13 +27,10 @@ public class RetrofitServiceMethod {
 
   private final ExecutableElement methodElement;
 
-  private final TypeMirror returnTypeMirror;
-
-  private static final String CACHE_STALE_HEADER = "Cache-Control: public, only-if-cached, max-stale=86400";
+  private static final String CACHE_STALE_HEADER = "Cache-Control: max-stale=86400";
 
   public RetrofitServiceMethod(ExecutableElement methodElement) {
     this.methodElement = methodElement;
-    returnTypeMirror = methodElement.getReturnType();
   }
 
   public List<MethodSpec> generateCodeWithRetryStaleIfRequired() {
@@ -94,7 +90,7 @@ public class RetrofitServiceMethod {
       annotationSpecs.forEach(builder::addAnnotation);
     }
 
-    return builder.returns(TypeName.get(returnTypeMirror)).build();
+    return builder.returns(TypeName.get(methodElement.getReturnType())).build();
   }
 
   private String getMethodName(boolean withRetryStaleHeader) {
@@ -105,10 +101,10 @@ public class RetrofitServiceMethod {
     if (methodElement.getAnnotation(GET.class) == null) {
       return false;
     }
-    if (returnTypeMirror.getKind() != TypeKind.DECLARED) {
+    if (methodElement.getReturnType().getKind() != TypeKind.DECLARED) {
       return false;
     }
-    String rawName = ((DeclaredType) returnTypeMirror).asElement().toString();
+    String rawName = ((DeclaredType) methodElement.getReturnType()).asElement().toString();
     return rawName.equals(Observable.class.getCanonicalName());
 
   }
@@ -118,4 +114,3 @@ public class RetrofitServiceMethod {
   }
 
 }
-

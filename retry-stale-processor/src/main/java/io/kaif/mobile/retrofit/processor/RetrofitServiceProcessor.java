@@ -32,7 +32,6 @@ import retrofit.http.PUT;
 @AutoService(Processor.class)
 public class RetrofitServiceProcessor extends AbstractProcessor {
 
-
   private Elements elementUtils;
   private Filer filer;
   private Messager messager;
@@ -51,24 +50,24 @@ public class RetrofitServiceProcessor extends AbstractProcessor {
         .flatMap(typeElement -> roundEnv.getElementsAnnotatedWith(typeElement).stream())
         .filter(element -> element.getKind() == ElementKind.METHOD)
         .map(Element::getEnclosingElement)
-        .filter(element -> element.getKind() == ElementKind.INTERFACE)
-        .filter(element -> !RetrofitAnnotatedInterface.isGenerated(element))
         .distinct()
-        .map(element -> new RetrofitAnnotatedInterface((TypeElement) element))
+        .filter(element -> element.getKind() == ElementKind.INTERFACE)
+        .filter(element -> !RetrofitServiceInterface.isGenerated(element))
+        .map(element -> new RetrofitServiceInterface((TypeElement) element))
         .forEach(this::generateCode);
     return true;
   }
 
-  private void generateCode(RetrofitAnnotatedInterface retrofitAnnotatedInterface) {
+  private void generateCode(RetrofitServiceInterface retrofitServiceInterface) {
 
-    TypeSpec typeSpec = retrofitAnnotatedInterface.createRetryStaleInterface();
+    TypeSpec typeSpec = retrofitServiceInterface.createRetryStaleInterface();
 
-    TypeElement annotatedClassElement = retrofitAnnotatedInterface.getAnnotatedClassElement();
+    TypeElement annotatedClassElement = retrofitServiceInterface.getAnnotatedClassElement();
     JavaFile javaFile = JavaFile.builder(elementUtils.getPackageOf(annotatedClassElement)
         .getQualifiedName()
         .toString(), typeSpec).build();
     try {
-      JavaFileObject jfo = filer.createSourceFile(retrofitAnnotatedInterface.getQualifiedName());
+      JavaFileObject jfo = filer.createSourceFile(retrofitServiceInterface.getQualifiedName());
       try (Writer writer = jfo.openWriter()) {
         javaFile.writeTo(writer);
       }

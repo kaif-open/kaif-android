@@ -54,6 +54,10 @@ public interface Beans {
 
   void inject(LatestDebatesFragment latestDebatesFragment);
 
+  void inject(NewsFeedActivity newsFeedActivity);
+
+  void inject(NewsFeedActivityFragment newsFeedActivityFragment);
+
   final class Initializer {
     public static Beans init(Application application) {
       return DaggerBeans.builder()
@@ -62,8 +66,4 @@ public interface Beans {
           .build();
     }
   }
-
-  void inject(NewsFeedActivity newsFeedActivity);
-
-  void inject(NewsFeedActivityFragment newsFeedActivityFragment);
 }

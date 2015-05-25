@@ -3,6 +3,8 @@ package io.kaif.mobile.util;
 import javax.inject.Singleton;
 
 import com.google.gson.Gson;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import android.app.Application;
 import android.content.Context;
@@ -43,6 +45,12 @@ public class UtilModule {
   @Singleton
   ConnectivityManager provideConnectivityManager() {
     return (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+  }
+
+  @Provides
+  @Singleton
+  RefWatcher provideRefWatcher() {
+    return LeakCanary.install(application);
   }
 
 }

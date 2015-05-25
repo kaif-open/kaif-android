@@ -1,6 +1,5 @@
 package io.kaif.mobile;
 
-
 import android.app.Application;
 
 public class KaifApplication extends Application {

@@ -9,7 +9,7 @@ import io.kaif.mobile.model.Vote;
 public interface ModelFixture {
 
   default Article article(String id) {
-    return Article.of("programming",
+    return new Article("programming",
         "pro",
         id,
         "aTitle",
@@ -25,6 +25,7 @@ public interface ModelFixture {
   default Vote upVote(String id) {
     return new Vote(id, Vote.VoteState.UP, new Date());
   }
+
   default Vote downVote(String id) {
     return new Vote(id, Vote.VoteState.DOWN, new Date());
   }

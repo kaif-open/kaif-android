@@ -83,7 +83,7 @@ public class ArticleDaemonTest extends AndroidTestCase implements ModelFixture {
 
   public void testCreateExternalLink_force_create() {
 
-    Article article = Article.of("zone",
+    Article article = new Article("zone",
         "pro",
         UUID.randomUUID().toString(),
         "title",
@@ -105,15 +105,15 @@ public class ArticleDaemonTest extends AndroidTestCase implements ModelFixture {
         .toBlocking()
         .single();
 
-    assertEquals(article.articleId(), result.articleId());
-    assertEquals(article.title(), result.title());
-    assertEquals(article.zone(), result.zone());
-    assertEquals(article.link(), result.link());
+    assertEquals(article.getArticleId(), result.getArticleId());
+    assertEquals(article.getTitle(), result.getTitle());
+    assertEquals(article.getZone(), result.getZone());
+    assertEquals(article.getLink(), result.getLink());
   }
 
   public void testCreateExternalLink() {
 
-    Article article = Article.of("zone",
+    Article article = new Article("zone",
         "pro",
         UUID.randomUUID().toString(),
         "title",
@@ -135,7 +135,7 @@ public class ArticleDaemonTest extends AndroidTestCase implements ModelFixture {
         .toBlocking()
         .single();
 
-    assertEquals(article.articleId(), result.articleId());
+    assertEquals(article.getArticleId(), result.getArticleId());
   }
 
 }

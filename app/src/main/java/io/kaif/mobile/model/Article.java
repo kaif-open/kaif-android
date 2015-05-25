@@ -3,81 +3,136 @@ package io.kaif.mobile.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import android.os.Parcelable;
-import auto.parcel.AutoParcel;
-import io.kaif.mobile.json.AutoGson;
-
-@AutoParcel
-@AutoGson
-public abstract class Article implements Parcelable, Serializable {
+public class Article implements Serializable {
 
   public enum ArticleType {
     EXTERNAL_LINK, SPEAK
   }
 
-  public abstract String zone();
+  private final String zone;
 
-  public abstract String zoneTitle();
+  private final String zoneTitle;
 
-  public abstract String articleId();
+  private final String articleId;
 
-  public abstract String title();
+  private final String title;
 
-  public abstract Date createTime();
+  private final Date createTime;
 
-  public abstract String link();
+  private final String link;
 
-  public abstract String content();
+  private final String content;
 
-  public abstract ArticleType articleType();
+  private final ArticleType articleType;
 
-  public abstract String authorName();
+  private final String authorName;
 
-  public abstract long upVote();
+  private final long upVote;
 
-  public abstract long debateCount();
+  private final long debateCount;
 
-  @Override
-  public boolean equals(Object o) {
-    if (o == this) {
-      return true;
-    }
-    if (o instanceof Article) {
-      Article that = (Article) o;
-      return (this.articleId().equals(that.articleId()));
-    }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int h = 1;
-    h *= 1000003;
-    h ^= articleId().hashCode();
-    return h;
-  }
-
-  public static Article of(String zone,
+  public Article(String zone,
       String zoneTitle,
       String articleId,
       String title,
       Date createTime,
       String link,
       String content,
-      Article.ArticleType articleType,
+      ArticleType articleType,
       String authorName,
       long upVote,
       long debateCount) {
-    return new AutoParcel_Article(zone,
-        zoneTitle,
-        articleId,
-        title,
-        createTime,
-        link,
-        content,
-        articleType,
-        authorName,
-        upVote,
-        debateCount);
+    this.zone = zone;
+    this.zoneTitle = zoneTitle;
+    this.articleId = articleId;
+    this.title = title;
+    this.createTime = createTime;
+    this.link = link;
+    this.content = content;
+    this.articleType = articleType;
+    this.authorName = authorName;
+    this.upVote = upVote;
+    this.debateCount = debateCount;
+  }
+
+  public String getZone() {
+    return zone;
+  }
+
+  public String getZoneTitle() {
+    return zoneTitle;
+  }
+
+  public String getArticleId() {
+    return articleId;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public String getLink() {
+    return link;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public ArticleType getArticleType() {
+    return articleType;
+  }
+
+  public String getAuthorName() {
+    return authorName;
+  }
+
+  public long getUpVote() {
+    return upVote;
+  }
+
+  public long getDebateCount() {
+    return debateCount;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Article article = (Article) o;
+
+    return articleId.equals(article.articleId);
+
+  }
+
+  @Override
+  public int hashCode() {
+    return articleId.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return "Article{" +
+        "zone='" + zone + '\'' +
+        ", zoneTitle='" + zoneTitle + '\'' +
+        ", articleId='" + articleId + '\'' +
+        ", title='" + title + '\'' +
+        ", createTime=" + createTime +
+        ", link='" + link + '\'' +
+        ", content='" + content + '\'' +
+        ", articleType=" + articleType +
+        ", authorName='" + authorName + '\'' +
+        ", upVote=" + upVote +
+        ", debateCount=" + debateCount +
+        '}';
   }
 }

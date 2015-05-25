@@ -85,7 +85,7 @@ public class ArticleDaemon {
   public Observable<ArticleViewModel> loadArticle(String articleId) {
     return articleService.loadArticle(articleId)
         .flatMap(article -> voteService.listArticleVotes(CommaSeparatedParam.of(Collections.singletonList(
-            article.articleId())))
+            article.getArticleId())))
             .map(votes -> new Pair<>(Collections.singletonList(article), votes))
             .map(this::mapToViewModel)
             .map(articleViewModels -> articleViewModels.get(0)));
@@ -103,7 +103,7 @@ public class ArticleDaemon {
   private List<String> mapArticlesToIds(List<Article> articles) {
     List<String> ids = new ArrayList<>();
     for (Article article : articles) {
-      ids.add(article.articleId());
+      ids.add(article.getArticleId());
     }
     return ids;
   }
@@ -114,7 +114,7 @@ public class ArticleDaemon {
 
     List<ArticleViewModel> viewModels = new ArrayList<>();
     for (Article article : articles) {
-      viewModels.add(new ArticleViewModel(article, loadVote(votes, article.articleId())));
+      viewModels.add(new ArticleViewModel(article, loadVote(votes, article.getArticleId())));
     }
     return viewModels;
   }

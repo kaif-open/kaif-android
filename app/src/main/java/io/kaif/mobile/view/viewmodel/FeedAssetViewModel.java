@@ -9,9 +9,9 @@ public class FeedAssetViewModel {
   private String assetId;
 
   public FeedAssetViewModel(FeedAsset feedAsset) {
-    this.assetId = feedAsset.assetId();
-    this.debateViewModel = new DebateViewModel(feedAsset.debate(),
-        Vote.abstain(feedAsset.debate().getDebateId()));
+    this.assetId = feedAsset.getAssetId();
+    this.debateViewModel = new DebateViewModel(feedAsset.getDebate(),
+        Vote.abstain(feedAsset.getDebate().getDebateId()));
   }
 
   public DebateViewModel getDebateViewModel() {

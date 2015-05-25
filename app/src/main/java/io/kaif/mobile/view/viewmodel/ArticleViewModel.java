@@ -28,47 +28,47 @@ public class ArticleViewModel implements Serializable {
   }
 
   public String getZone() {
-    return article.zone();
+    return article.getZone();
   }
 
   public Date getCreateTime() {
-    return article.createTime();
+    return article.getCreateTime();
   }
 
   public String getTitle() {
-    return article.title();
+    return article.getTitle();
   }
 
   public Article.ArticleType getArticleType() {
-    return article.articleType();
+    return article.getArticleType();
   }
 
   public long getScore() {
-    return article.upVote() + currentVoteState.delta(vote.getVoteState());
+    return article.getUpVote() + currentVoteState.delta(vote.getVoteState());
   }
 
   public String getLink() {
-    return article.link();
+    return article.getLink();
   }
 
   public long getDebateCount() {
-    return article.debateCount();
+    return article.getDebateCount();
   }
 
   public String getZoneTitle() {
-    return article.zoneTitle();
+    return article.getZoneTitle();
   }
 
   public String getArticleId() {
-    return article.articleId();
+    return article.getArticleId();
   }
 
   public String getContent() {
-    return article.content();
+    return article.getContent();
   }
 
   public String getAuthorName() {
-    return article.authorName();
+    return article.getAuthorName();
   }
 
   public void setCanShowVoteAnimation(boolean canShowVoteAnimation) {

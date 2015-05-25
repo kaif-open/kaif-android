@@ -3,55 +3,74 @@ package io.kaif.mobile.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import auto.parcel.AutoParcel;
-import io.kaif.mobile.json.AutoGson;
 
-@AutoParcel
-@AutoGson
-public abstract class FeedAsset implements Parcelable, Serializable {
+public class FeedAsset implements Serializable {
   enum AssetType {
     DEBATE_FROM_REPLY
   }
 
-  public static FeedAsset of(String assetId,
+  private String assetId;
+
+  private AssetType assetType;
+
+  private Date createTime;
+
+  private boolean acknowledged;
+
+  @Nullable
+  private Debate debate;
+
+  public FeedAsset(String assetId,
       AssetType assetType,
       Date createTime,
       boolean acknowledged,
-      Debate debate) {
-    return new AutoParcel_FeedAsset(assetId, assetType, createTime, acknowledged, debate);
+      @Nullable Debate debate) {
+    this.assetId = assetId;
+    this.assetType = assetType;
+    this.createTime = createTime;
+    this.acknowledged = acknowledged;
+    this.debate = debate;
   }
 
-  public abstract String assetId();
+  public String getAssetId() {
+    return assetId;
+  }
 
-  public abstract AssetType assetType();
+  public AssetType getAssetType() {
+    return assetType;
+  }
 
-  public abstract Date createTime();
+  public Date getCreateTime() {
+    return createTime;
+  }
 
-  public abstract boolean acknowledged();
+  public boolean isAcknowledged() {
+    return acknowledged;
+  }
 
   @Nullable
-  public abstract Debate debate();
+  public Debate getDebate() {
+    return debate;
+  }
 
   @Override
   public boolean equals(Object o) {
-    if (o == this) {
+    if (this == o) {
       return true;
     }
-    if (o instanceof FeedAsset) {
-      FeedAsset that = (FeedAsset) o;
-      return (this.assetId().equals(that.assetId()));
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
-    return false;
+
+    FeedAsset feedAsset = (FeedAsset) o;
+
+    return assetId.equals(feedAsset.assetId);
+
   }
 
   @Override
   public int hashCode() {
-    int h = 1;
-    h *= 1000003;
-    h ^= assetId().hashCode();
-    return h;
+    return assetId.hashCode();
   }
-
 }

@@ -51,14 +51,14 @@ public class RetrofitServiceMethod {
           variableElement.getSimpleName().toString());
       variableElement.getAnnotationMirrors()
           .stream()
-          .map(AnnotationSpectUtil::generate)
+          .map(AnnotationSpecUtil::generate)
           .forEach(parameterBuilder::addAnnotation);
       return parameterBuilder.build();
     }).forEach(builder::addParameter);
 
     List<AnnotationSpec> annotationSpecs = methodElement.getAnnotationMirrors()
         .stream()
-        .map(AnnotationSpectUtil::generate)
+        .map(AnnotationSpecUtil::generate)
         .collect(toList());
 
     if (withRetryStaleHeader) {

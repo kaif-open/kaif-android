@@ -30,7 +30,6 @@ import io.kaif.mobile.R;
 import io.kaif.mobile.kmark.KmarkProcessor;
 import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Vote;
-import io.kaif.mobile.view.daemon.ArticleDaemon;
 import io.kaif.mobile.view.daemon.VoteDaemon;
 import io.kaif.mobile.view.graphics.drawable.LevelDrawable;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;

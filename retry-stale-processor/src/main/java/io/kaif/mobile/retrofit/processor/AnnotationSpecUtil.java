@@ -17,7 +17,7 @@ import com.squareup.javapoet.ClassName;
  * copy from https://github.com/square/javapoet/pull/268
  * delete this file after pull request merge into https://github.com/square/javapoet
  */
-public class AnnotationSpectUtil {
+public class AnnotationSpecUtil {
 
   public static AnnotationSpec generate(AnnotationMirror annotation) {
     TypeElement element = (TypeElement) annotation.getAnnotationType().asElement();

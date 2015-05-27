@@ -1,5 +1,6 @@
 package io.kaif.mobile.retrofit.processor;
 
+import static com.google.common.truth.Truth.ASSERT;
 import static com.google.common.truth.Truth.assert_;
 import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
 
@@ -134,7 +135,7 @@ public class RetrofitServiceProcessorTest {
     JavaFileObject inputFile = JavaFileObjects.forSourceString("test.Foo", input);
     JavaFileObject outputFile = JavaFileObjects.forSourceString("test.Foo$$RetryStale", output);
 
-    assert_().about(javaSources())
+    ASSERT.about(javaSources())
         .that(ImmutableList.of(inputFile))
         .processedWith(new io.kaif.mobile.retrofit.processor.RetrofitServiceProcessor())
         .compilesWithoutError()

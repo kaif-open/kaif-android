@@ -55,7 +55,7 @@ public class RetrofitServiceProcessor extends AbstractProcessor {
         .filter(element -> !RetrofitServiceInterface.isGenerated(element))
         .map(element -> new RetrofitServiceInterface((TypeElement) element))
         .forEach(this::generateCode);
-    return true;
+    return false;
   }
 
   private void generateCode(RetrofitServiceInterface retrofitServiceInterface) {

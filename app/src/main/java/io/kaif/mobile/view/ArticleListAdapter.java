@@ -16,7 +16,6 @@ import butterknife.InjectView;
 import io.kaif.mobile.R;
 import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Vote;
-import io.kaif.mobile.view.daemon.ArticleDaemon;
 import io.kaif.mobile.view.daemon.VoteDaemon;
 import io.kaif.mobile.view.viewmodel.ArticleViewModel;
 import io.kaif.mobile.view.widget.ArticleScoreTextView;
@@ -86,16 +85,12 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
   private final List<ArticleViewModel> articles;
 
-  private ArticleDaemon articleDaemon;
   private VoteDaemon voteDaemon;
   private final OnItemClickListener onItemClickListener;
 
   private boolean hasNextPage;
 
-  public ArticleListAdapter(ArticleDaemon articleDaemon,
-      VoteDaemon voteDaemon,
-      OnItemClickListener onItemClickListener) {
-    this.articleDaemon = articleDaemon;
+  public ArticleListAdapter(VoteDaemon voteDaemon, OnItemClickListener onItemClickListener) {
     this.voteDaemon = voteDaemon;
     this.onItemClickListener = onItemClickListener;
     this.articles = new ArrayList<>();
@@ -114,9 +109,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     viewHolder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick((ArticleViewModel) v
         .getTag()));
-    viewHolder.setOnItemVoteClickListener((v,
-        from,
-        to) -> voteDaemon.voteArticle(((ArticleViewModel) v.getTag()).getArticleId(), from, to));
+    viewHolder.setOnItemVoteClickListener((v, from, to) -> voteDaemon.voteArticle(((ArticleViewModel) v
+        .getTag()).getArticleId(), from, to));
     return viewHolder;
   }
 

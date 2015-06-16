@@ -104,8 +104,7 @@ public class ArticlesFragment extends BaseFragment {
   private void setupView() {
     final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     articleListView.setLayoutManager(linearLayoutManager);
-    adapter = new ArticleListAdapter(articleDaemon,
-        voteDaemon,
+    adapter = new ArticleListAdapter(voteDaemon,
         item -> startActivity(DebatesActivity.DebatesActivityIntent.create(getActivity(), item)));
     articleListView.setAdapter(adapter);
     articleListView.getItemAnimator().setChangeDuration(120);
@@ -130,8 +129,9 @@ public class ArticlesFragment extends BaseFragment {
 
   private void reload() {
     pullToRefreshLayout.setRefreshing(true);
-    bind(listArticles(null)).subscribe(adapter::refresh, throwable -> {
-    }, () -> pullToRefreshLayout.setRefreshing(false));
+    bind(listArticles(null)).subscribe(adapter::refresh,
+        throwable -> pullToRefreshLayout.setRefreshing(false),
+        () -> pullToRefreshLayout.setRefreshing(false));
   }
 
 }

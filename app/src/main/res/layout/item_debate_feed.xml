@@ -22,9 +22,9 @@
                 android:id="@+id/zone"/>
     </LinearLayout>
 
-    <View
+    <ImageView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/code_gray"
+            android:layout_height="wrap_content"
+            android:src="@drawable/news_feed_divider"
             />
 </LinearLayout>

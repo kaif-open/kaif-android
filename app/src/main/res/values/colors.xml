@@ -11,4 +11,5 @@
     <color name="kaif_button_blue">#0078E7</color>
     <color name="code_gray">#ffcccccc</color>
     <color name="indicator_gray">#71BAEA</color>
+    <color name="highlight_orange">#ff5619</color>
 </resources>

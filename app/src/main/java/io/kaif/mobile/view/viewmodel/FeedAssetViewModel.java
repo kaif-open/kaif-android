@@ -6,10 +6,13 @@ import io.kaif.mobile.model.Vote;
 public class FeedAssetViewModel {
 
   private DebateViewModel debateViewModel;
-  private String assetId;
+  private FeedAsset feedAsset;
+  private boolean read;
 
-  public FeedAssetViewModel(FeedAsset feedAsset) {
-    this.assetId = feedAsset.getAssetId();
+  public FeedAssetViewModel(FeedAsset feedAsset, boolean read) {
+    this.feedAsset = feedAsset;
+    this.read = read;
+    //doesn't support inline vote yet, provide fake vote state.
     this.debateViewModel = new DebateViewModel(feedAsset.getDebate(),
         Vote.abstain(feedAsset.getDebate().getDebateId()));
   }
@@ -19,6 +22,10 @@ public class FeedAssetViewModel {
   }
 
   public String getAssetId() {
-    return assetId;
+    return feedAsset.getAssetId();
+  }
+
+  public boolean isRead() {
+    return read;
   }
 }

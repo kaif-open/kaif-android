@@ -38,8 +38,11 @@ public class FeedDaemon {
 
   private List<FeedAssetViewModel> mapToViewModel(List<FeedAsset> feedAssets) {
     List<FeedAssetViewModel> vms = new ArrayList<>();
+    boolean isRead = false;
     for (int i = 0; i < feedAssets.size(); i++) {
-      vms.add(new FeedAssetViewModel(feedAssets.get(i)));
+      FeedAsset feedAsset = feedAssets.get(i);
+      isRead |= feedAsset.isAcknowledged();
+      vms.add(new FeedAssetViewModel(feedAsset, isRead));
     }
     return vms;
   }

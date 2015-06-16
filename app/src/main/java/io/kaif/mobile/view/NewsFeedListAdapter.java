@@ -56,8 +56,8 @@ public class NewsFeedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
       content.setOnTouchListener(new ClickableSpanTouchListener());
     }
 
-    public void update(DebateViewModel debateViewModel) {
-      this.debateViewModel = debateViewModel;
+    public void update(FeedAssetViewModel feedAssetViewModel) {
+      this.debateViewModel = feedAssetViewModel.getDebateViewModel();
       final Context context = itemView.getContext();
       debaterName.setText(debateViewModel.getDebaterName());
       content.setText(KmarkProcessor.process(context, debateViewModel.getContent()));
@@ -65,6 +65,7 @@ public class NewsFeedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
           .getTime(), System.currentTimeMillis(), 0, DateUtils.FORMAT_ABBREV_RELATIVE));
       voteScore.setText(String.valueOf(debateViewModel.getVoteScore()));
       zone.setText(itemView.getContext().getString(R.string.zone_path, debateViewModel.getZone()));
+      itemView.setActivated(!feedAssetViewModel.isRead());
     }
 
   }
@@ -102,7 +103,7 @@ public class NewsFeedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
     FeedAssetViewModel feedAssetViewModel = feedAssets.get(position);
     DebateViewHolder debateViewHolder = (DebateViewHolder) holder;
-    debateViewHolder.update(feedAssetViewModel.getDebateViewModel());
+    debateViewHolder.update(feedAssetViewModel);
   }
 
   @Override

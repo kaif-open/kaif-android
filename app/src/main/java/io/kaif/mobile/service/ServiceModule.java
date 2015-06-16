@@ -1,5 +1,7 @@
 package io.kaif.mobile.service;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -140,6 +142,8 @@ public class ServiceModule {
   @Singleton
   OkHttpClient provideOkClient(Cache cache) {
     final OkHttpClient okHttpClient = new OkHttpClient();
+    okHttpClient.setConnectTimeout(15, TimeUnit.SECONDS);
+    okHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
     okHttpClient.setCache(cache);
     return okHttpClient;
   }

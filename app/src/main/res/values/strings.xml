@@ -36,6 +36,4 @@
     <string name="latest">NEW</string>
     <string name="debate">DEBATES</string>
     <string name="news_feed">News feed</string>
-    <string name="title_activity_news_feed">NewsFeedActivity</string>
-    <string name="hello_world">Hello world!</string>
 </resources>

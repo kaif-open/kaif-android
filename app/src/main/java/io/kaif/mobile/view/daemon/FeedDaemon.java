@@ -1,10 +1,13 @@
 package io.kaif.mobile.view.daemon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.kaif.mobile.IgnoreAllSubscriber;
+import io.kaif.mobile.model.FeedAsset;
 import io.kaif.mobile.service.FeedService;
 import io.kaif.mobile.view.viewmodel.FeedAssetViewModel;
 import rx.Observable;
@@ -24,10 +27,24 @@ public class FeedDaemon {
   }
 
   public Observable<List<FeedAssetViewModel>> listAndAcknowledgeIfRequired() {
-    return Observable.empty();
+    return feedService.news(null).map(feedAssets -> {
+      if (!feedAssets.isEmpty()) {
+        feedService.acknowledge(new FeedService.AcknowledgeEntry(feedAssets.get(0).getAssetId()))
+            .subscribe(new IgnoreAllSubscriber<>());
+      }
+      return mapToViewModel(feedAssets);
+    });
+  }
+
+  private List<FeedAssetViewModel> mapToViewModel(List<FeedAsset> feedAssets) {
+    List<FeedAssetViewModel> vms = new ArrayList<>();
+    for (int i = 0; i < feedAssets.size(); i++) {
+      vms.add(new FeedAssetViewModel(feedAssets.get(i)));
+    }
+    return vms;
   }
 
   public Observable<List<FeedAssetViewModel>> listNewsFeed(String feedAssetId) {
-    return Observable.empty();
+    return feedService.news(feedAssetId).map(this::mapToViewModel);
   }
 }

@@ -6,6 +6,7 @@ import io.kaif.mobile.model.FeedAsset;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Query;
 import rx.Observable;
 
 public interface FeedService {
@@ -39,10 +40,10 @@ public interface FeedService {
   }
 
   @POST("/v1/feed/acknowledge")
-  void acknowledge(@Body AcknowledgeEntry acknowledgeEntry);
+  Observable<Void> acknowledge(@Body AcknowledgeEntry acknowledgeEntry);
 
   @GET("/v1/feed/news")
-  Observable<List<FeedAsset>> news();
+  Observable<List<FeedAsset>> news(@Query("start-asset-id") String startAssetId);
 
   @GET("/v1/feed/news-unread-count")
   Observable<Integer> newsUnreadCount();

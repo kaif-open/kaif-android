@@ -113,7 +113,8 @@ public class ArticleDaemon {
     final List<Vote> votes = articlesAndVotes.second;
 
     List<ArticleViewModel> viewModels = new ArrayList<>();
-    for (Article article : articles) {
+    for (int i = 0; i < articles.size(); i++) {
+      Article article = articles.get(i);
       viewModels.add(new ArticleViewModel(article, loadVote(votes, article.getArticleId())));
     }
     return viewModels;

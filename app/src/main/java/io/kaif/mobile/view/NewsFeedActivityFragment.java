@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +64,11 @@ public class NewsFeedActivityFragment extends BaseFragment {
     final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     debateListView.setLayoutManager(linearLayoutManager);
     adapter = new NewsFeedListAdapter();
+    adapter.setOnItemClickListener(debateViewModel -> {
+      Intent intent = DebatesActivity.DebatesActivityIntent.create(getActivity(), debateViewModel);
+      startActivity(intent);
+    });
+
     debateListView.setAdapter(adapter);
     debateListView.getItemAnimator().setChangeDuration(120);
     debateListView.addOnScrollListener(new OnScrollToLastListener() {

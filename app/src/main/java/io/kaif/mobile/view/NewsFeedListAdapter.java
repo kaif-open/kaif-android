@@ -20,7 +20,17 @@ import io.kaif.mobile.view.widget.ClickableSpanTouchListener;
 
 public class NewsFeedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-  static class DebateViewHolder extends RecyclerView.ViewHolder {
+  public interface OnItemClickListener {
+    void onItemClick(DebateViewModel debateViewModel);
+  }
+
+  public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    this.onItemClickListener = onItemClickListener;
+  }
+
+  private OnItemClickListener onItemClickListener;
+
+  class DebateViewHolder extends RecyclerView.ViewHolder {
 
     @InjectView(R.id.content)
     public TextView content;
@@ -33,13 +43,21 @@ public class NewsFeedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @InjectView(R.id.zone)
     public TextView zone;
 
+    private DebateViewModel debateViewModel;
+
     public DebateViewHolder(View itemView) {
       super(itemView);
       ButterKnife.inject(this, itemView);
+      itemView.setOnClickListener(v -> {
+        if (onItemClickListener != null) {
+          onItemClickListener.onItemClick(debateViewModel);
+        }
+      });
       content.setOnTouchListener(new ClickableSpanTouchListener());
     }
 
     public void update(DebateViewModel debateViewModel) {
+      this.debateViewModel = debateViewModel;
       final Context context = itemView.getContext();
       debaterName.setText(debateViewModel.getDebaterName());
       content.setText(KmarkProcessor.process(context, debateViewModel.getContent()));

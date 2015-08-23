@@ -7,8 +7,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseActivity;
@@ -23,14 +23,14 @@ public class NewsFeedActivity extends BaseActivity {
 
   }
 
-  @InjectView(R.id.tool_bar)
+  @Bind(R.id.tool_bar)
   Toolbar toolbar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_news_feed);
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
     KaifApplication.getInstance().beans().inject(this);
     setSupportActionBar(toolbar);
     setTitle(R.string.news_feed);

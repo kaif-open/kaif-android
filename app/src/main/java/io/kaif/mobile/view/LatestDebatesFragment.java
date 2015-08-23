@@ -16,7 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
@@ -29,10 +29,10 @@ public class LatestDebatesFragment extends BaseFragment {
 
   public static final int RELOAD_EXPIRE_INTERVAL = 5 * 60 * 1000;
 
-  @InjectView(R.id.debate_list)
+  @Bind(R.id.debate_list)
   RecyclerView debateListView;
 
-  @InjectView(R.id.pull_to_refresh)
+  @Bind(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
@@ -64,7 +64,7 @@ public class LatestDebatesFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_latest_debates, container, false);
-    ButterKnife.inject(this, view);
+    ButterKnife.bind(this, view);
     setupView();
     return view;
   }
@@ -109,15 +109,10 @@ public class LatestDebatesFragment extends BaseFragment {
     });
     GestureDetectorCompat gestureDetector = new GestureDetectorCompat(getActivity(),
         new OnItemClickListener());
-    debateListView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+    debateListView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
       @Override
       public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
         return gestureDetector.onTouchEvent(e);
-      }
-
-      @Override
-      public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
       }
     });
     pullToRefreshLayout.setOnRefreshListener(LatestDebatesFragment.this::reload);

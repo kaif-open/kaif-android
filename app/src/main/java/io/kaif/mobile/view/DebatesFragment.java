@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
@@ -31,10 +31,10 @@ public class DebatesFragment extends BaseFragment {
   public static final String ARTICLE = "ARTICLE";
   public static final String DEBATE_ID = "DEBATE_ID";
   public static final int AUTO_SCROLL_OFFSET_DP = 30;
-  @InjectView(R.id.debate_list)
+  @Bind(R.id.debate_list)
   RecyclerView debateListView;
 
-  @InjectView(R.id.pull_to_refresh)
+  @Bind(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
@@ -70,7 +70,7 @@ public class DebatesFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_debates, container, false);
-    ButterKnife.inject(this, view);
+    ButterKnife.bind(this, view);
     article = (ArticleViewModel) getArguments().getSerializable(ARTICLE);
     setupView();
     fillContent();

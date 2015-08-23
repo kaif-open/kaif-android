@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseActivity;
@@ -63,7 +63,7 @@ public class DebatesActivity extends BaseActivity {
 
   public static final String ARTICLE_KEY = "ARTICLE";
 
-  @InjectView(R.id.tool_bar)
+  @Bind(R.id.tool_bar)
   Toolbar toolbar;
 
   private ArticleViewModel article;
@@ -71,14 +71,14 @@ public class DebatesActivity extends BaseActivity {
   @Inject
   ArticleDaemon articleDaemon;
 
-  @InjectView(R.id.loading)
+  @Bind(R.id.loading)
   ProgressBar loading;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_debates);
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
     KaifApplication.getInstance().beans().inject(this);
     setSupportActionBar(toolbar);
 

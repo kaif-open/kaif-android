@@ -23,8 +23,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import io.kaif.mobile.R;
 import io.kaif.mobile.kmark.KmarkProcessor;
@@ -47,30 +47,30 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
   static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-    @InjectView(R.id.vote)
+    @Bind(R.id.vote)
     public VoteArticleButton vote;
-    @InjectView(R.id.vote_count)
+    @Bind(R.id.vote_count)
     public ArticleScoreTextView voteCount;
-    @InjectView(R.id.title)
+    @Bind(R.id.title)
     public TextView title;
-    @InjectView(R.id.link)
+    @Bind(R.id.link)
     public TextView link;
-    @InjectView(R.id.zone)
+    @Bind(R.id.zone)
     public TextView zone;
-    @InjectView(R.id.debate_count)
+    @Bind(R.id.debate_count)
     public TextView debateCount;
-    @InjectView(R.id.reply)
+    @Bind(R.id.reply)
     public ImageButton replyButton;
-    @InjectView(R.id.self_content)
+    @Bind(R.id.self_content)
     public TextView content;
-    @InjectView(R.id.author_name)
+    @Bind(R.id.author_name)
     public TextView authorName;
 
     private ArticleViewModel articleViewModel;
 
     public ArticleViewHolder(View itemView) {
       super(itemView);
-      ButterKnife.inject(this, itemView);
+      ButterKnife.bind(this, itemView);
       content.setOnTouchListener(new ClickableSpanTouchListener());
     }
 
@@ -128,20 +128,20 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
   static class DebateViewHolder extends RecyclerView.ViewHolder {
 
-    @InjectView(R.id.content)
+    @Bind(R.id.content)
     public TextView content;
-    @InjectView(R.id.last_update_time)
+    @Bind(R.id.last_update_time)
     public TextView lastUpdateTime;
-    @InjectView(R.id.vote_score)
+    @Bind(R.id.vote_score)
     public TextView voteScore;
-    @InjectView(R.id.debater_name)
+    @Bind(R.id.debater_name)
     public TextView debaterName;
-    @InjectView(R.id.debate_actions)
+    @Bind(R.id.debate_actions)
     public DebateActions debateActions;
 
     public DebateViewHolder(View itemView) {
       super(itemView);
-      ButterKnife.inject(this, itemView);
+      ButterKnife.bind(this, itemView);
       content.setOnTouchListener(new ClickableSpanTouchListener());
     }
 
@@ -226,8 +226,9 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
       ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
       articleViewHolder.update(article);
       articleViewHolder.setOnReplyClickListener(v -> onReplyClickListener.onReplyClicked(null, 1));
-      articleViewHolder.setOnVoteClickListener((from,
-          to) -> voteDaemon.voteArticle(article.getArticleId(), from, to));
+      articleViewHolder.setOnVoteClickListener((from, to) -> voteDaemon.voteArticle(article.getArticleId(),
+          from,
+          to));
       return;
     }
     DebateViewModel debateVm = debates.get(position - 1);
@@ -235,8 +236,9 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     debateViewHolder.update(debateVm, position == selectedPosition);
     debateViewHolder.setOnReplyClickListener(v -> onReplyClickListener.onReplyClicked(debateVm.getDebateId(),
         debateVm.getLevel() + 1));
-    debateViewHolder.setOnVoteClickListener((from,
-        to) -> voteDaemon.voteDebate(debateVm.getDebateId(), from, to));
+    debateViewHolder.setOnVoteClickListener((from, to) -> voteDaemon.voteDebate(debateVm.getDebateId(),
+        from,
+        to));
     holder.itemView.setOnClickListener(v -> selectItem(holder.getAdapterPosition()));
   }
 

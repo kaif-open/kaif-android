@@ -3,6 +3,7 @@ package io.kaif.mobile.view;
 import javax.inject.Inject;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,15 +11,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
 import io.kaif.mobile.view.daemon.AccountDaemon;
 import io.kaif.mobile.view.daemon.FeedDaemon;
 import io.kaif.mobile.view.drawable.NewsFeedBadgeDrawable;
-import io.kaif.mobile.view.widget.SlidingTabLayout;
 
 public class HomeFragment extends BaseFragment {
 
@@ -26,10 +26,10 @@ public class HomeFragment extends BaseFragment {
     return new HomeFragment();
   }
 
-  @InjectView(R.id.sliding_tabs)
-  SlidingTabLayout slidingTabLayout;
+  @Bind(R.id.sliding_tabs)
+  TabLayout slidingTabLayout;
 
-  @InjectView(R.id.view_pager)
+  @Bind(R.id.view_pager)
   ViewPager viewPager;
 
   @Inject
@@ -54,10 +54,9 @@ public class HomeFragment extends BaseFragment {
   @Override
   public void onResume() {
     super.onResume();
-    bind(feedDaemon.newsUnreadCount()).subscribe(newsFeedBadgeDrawable::changeCount,
-        ignoreEx -> {
+    bind(feedDaemon.newsUnreadCount()).subscribe(newsFeedBadgeDrawable::changeCount, ignoreEx -> {
 
-        });
+    });
   }
 
   @Override
@@ -87,14 +86,13 @@ public class HomeFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_home, container, false);
-    ButterKnife.inject(this, view);
+    ButterKnife.bind(this, view);
 
     viewPager.setAdapter(new HomePagerAdapter(getActivity(), getFragmentManager()));
     viewPager.setOffscreenPageLimit(2);
     slidingTabLayout.setBackgroundColor(getResources().getColor(R.color.kaif_blue));
-    slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.indicator_gray));
-    slidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
-    slidingTabLayout.setViewPager(viewPager);
+    slidingTabLayout.setupWithViewPager(viewPager);
+    viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(slidingTabLayout));
 
     return view;
   }

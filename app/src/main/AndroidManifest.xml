@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="io.kaif.mobile">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -31,9 +32,11 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:host="@string/redirect_uri_host"
+                <data
+                        android:host="@string/redirect_uri_host"
                         android:pathPrefix="@string/redirect_uri_path_prefix"
-                        android:scheme="@string/redirect_uri_scheme"/>
+                        android:scheme="@string/redirect_uri_scheme"
+                        tools:ignore="AppIndexingApiError"/>
             </intent-filter>
         </activity>
         <activity

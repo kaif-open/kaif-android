@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import io.kaif.mobile.R;
 import io.kaif.mobile.kmark.KmarkProcessor;
 import io.kaif.mobile.view.viewmodel.DebateViewModel;
@@ -21,20 +21,20 @@ public class LatestDebateListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   static class DebateViewHolder extends RecyclerView.ViewHolder {
 
-    @InjectView(R.id.content)
+    @Bind(R.id.content)
     public TextView content;
-    @InjectView(R.id.last_update_time)
+    @Bind(R.id.last_update_time)
     public TextView lastUpdateTime;
-    @InjectView(R.id.vote_score)
+    @Bind(R.id.vote_score)
     public TextView voteScore;
-    @InjectView(R.id.debater_name)
+    @Bind(R.id.debater_name)
     public TextView debaterName;
-    @InjectView(R.id.zone)
+    @Bind(R.id.zone)
     public TextView zone;
 
     public DebateViewHolder(View itemView) {
       super(itemView);
-      ButterKnife.inject(this, itemView);
+      ButterKnife.bind(this, itemView);
       content.setOnTouchListener(new ClickableSpanTouchListener());
     }
 

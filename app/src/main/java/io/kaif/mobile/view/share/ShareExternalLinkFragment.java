@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -18,8 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
@@ -27,8 +29,6 @@ import io.kaif.mobile.model.Zone;
 import io.kaif.mobile.model.exception.DuplicateArticleUrlException;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
 import io.kaif.mobile.view.daemon.ZoneDaemon;
-import rx.android.widget.OnTextChangeEvent;
-import rx.android.widget.WidgetObservable;
 
 public class ShareExternalLinkFragment extends BaseFragment {
 
@@ -39,13 +39,13 @@ public class ShareExternalLinkFragment extends BaseFragment {
     return fragment;
   }
 
-  @InjectView(R.id.title)
+  @Bind(R.id.title)
   EditText titleEditText;
 
-  @InjectView(R.id.url)
+  @Bind(R.id.url)
   EditText urlEditText;
 
-  @InjectView(R.id.zone_name)
+  @Bind(R.id.zone_name)
   Spinner zoneNameSpinner;
 
   @Inject
@@ -66,7 +66,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
     MenuItem shareBtn = menu.findItem(R.id.action_share);
     shareBtn.setEnabled(false);
 
-    bind(WidgetObservable.text(titleEditText, true)).map(OnTextChangeEvent::text)
+    RxTextView.textChanges(titleEditText)
         .map(t -> t.length() >= 3)
         .distinctUntilChanged()
         .subscribe(shareBtn::setEnabled);
@@ -114,7 +114,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
 
     setHasOptionsMenu(true);
     final View view = inflater.inflate(R.layout.fragment_share_external_link, container, false);
-    ButterKnife.inject(this, view);
+    ButterKnife.bind(this, view);
 
     KaifApplication.getInstance().beans().inject(this);
 

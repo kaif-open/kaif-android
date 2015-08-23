@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
@@ -25,10 +25,10 @@ import rx.Observable;
 
 public class NewsFeedActivityFragment extends BaseFragment {
 
-  @InjectView(R.id.debate_list)
+  @Bind(R.id.debate_list)
   RecyclerView debateListView;
 
-  @InjectView(R.id.pull_to_refresh)
+  @Bind(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
@@ -50,7 +50,7 @@ public class NewsFeedActivityFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_news_feed, container, false);
-    ButterKnife.inject(this, view);
+    ButterKnife.bind(this, view);
     setupView();
     fillContent();
     return view;

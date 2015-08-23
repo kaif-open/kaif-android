@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import io.kaif.mobile.R;
 import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Vote;
@@ -33,24 +33,24 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
   static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-    @InjectView(R.id.vote)
+    @Bind(R.id.vote)
     public VoteArticleButton vote;
-    @InjectView(R.id.vote_count)
+    @Bind(R.id.vote_count)
     public ArticleScoreTextView voteCount;
-    @InjectView(R.id.title)
+    @Bind(R.id.title)
     public TextView title;
-    @InjectView(R.id.link)
+    @Bind(R.id.link)
     public TextView link;
-    @InjectView(R.id.zone)
+    @Bind(R.id.zone)
     public TextView zone;
-    @InjectView(R.id.debate_count)
+    @Bind(R.id.debate_count)
     public TextView debateCount;
-    @InjectView(R.id.author_name)
+    @Bind(R.id.author_name)
     public TextView authorName;
 
     public ArticleViewHolder(View itemView) {
       super(itemView);
-      ButterKnife.inject(this, itemView);
+      ButterKnife.bind(this, itemView);
     }
 
     public void update(ArticleViewModel article) {

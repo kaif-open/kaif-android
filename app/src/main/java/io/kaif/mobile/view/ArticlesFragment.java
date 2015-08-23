@@ -11,8 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
@@ -27,10 +27,10 @@ public class ArticlesFragment extends BaseFragment {
 
   public static final int RELOAD_EXPIRE_INTERVAL = 5 * 60 * 1000;
 
-  @InjectView(R.id.article_list)
+  @Bind(R.id.article_list)
   RecyclerView articleListView;
 
-  @InjectView(R.id.pull_to_refresh)
+  @Bind(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
@@ -77,7 +77,7 @@ public class ArticlesFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_articles, container, false);
-    ButterKnife.inject(this, view);
+    ButterKnife.bind(this, view);
     setupView();
     return view;
   }

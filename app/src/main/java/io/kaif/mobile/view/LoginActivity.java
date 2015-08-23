@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseActivity;
@@ -25,16 +25,16 @@ public class LoginActivity extends BaseActivity {
   @Inject
   AccountDaemon accountDaemon;
 
-  @InjectView(R.id.sign_in)
+  @Bind(R.id.sign_in)
   Button signInBtn;
 
-  @InjectView(R.id.sign_in_progress)
+  @Bind(R.id.sign_in_progress)
   ProgressBar signInProgress;
 
-  @InjectView(R.id.sign_in_title)
+  @Bind(R.id.sign_in_title)
   TextView signInTitle;
 
-  @InjectView(R.id.title)
+  @Bind(R.id.title)
   TextView title;
 
   @Override
@@ -42,7 +42,7 @@ public class LoginActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
 
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
     KaifApplication.getInstance().beans().inject(this);
 
     int triangleSize = (int) -title.getPaint().ascent();

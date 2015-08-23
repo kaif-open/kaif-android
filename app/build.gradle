@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+// This does not break the build when Android Studio is missing the JRebel for Android plugin.
+apply plugin: 'com.zeroturnaround.jrebel.android'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.neenbedankt.android-apt'
 
@@ -18,13 +20,13 @@ android {
     exclude 'LICENSE.txt'
   }
 
-  compileSdkVersion 22
-  buildToolsVersion "22.0.1"
+  compileSdkVersion 23
+  buildToolsVersion "23.0.0"
 
   defaultConfig {
     applicationId "io.kaif.mobile"
     minSdkVersion 16
-    targetSdkVersion 22
+    targetSdkVersion 23
     versionCode buildVersionCode.toInteger()
     versionName buildVersionName
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -67,6 +69,12 @@ android {
     abortOnError false
   }
 
+  testOptions.unitTests.all {
+    testLogging {
+      events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+    }
+  }
+
   android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
       def outputFile = output.outputFile
@@ -84,19 +92,24 @@ dependencies {
   retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:1.8.1'
 
   apt 'com.github.frankiesardo:auto-parcel-processor:0.3'
-  apt "com.google.dagger:dagger-compiler:2.0"
+  apt "com.google.dagger:dagger-compiler:2.0.1"
   apt project(':retry-stale-processor')
 
   provided 'javax.annotation:jsr250-api:1.0'
   provided 'com.github.frankiesardo:auto-parcel:0.3'
 
-  compile 'com.android.support:support-v4:22.1.1'
-  compile 'com.android.support:appcompat-v7:22.1.1'
-  compile 'com.android.support:recyclerview-v7:22.1.1'
-  compile 'io.reactivex:rxjava:1.0.10'
-  compile 'io.reactivex:rxandroid:0.24.0'
-  compile 'io.reactivex:rxandroid-framework:0.24.0'
-  compile 'com.jakewharton:butterknife:6.1.0'
+  compile('com.android.support:appcompat-v7:23.0.0')
+  compile('com.android.support:recyclerview-v7:23.0.0')
+  compile('com.android.support:design:23.0.0')
+  compile 'com.android.support:support-v4:23.0.0'
+
+  compile 'io.reactivex:rxandroid:1.0.1'
+  compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
+  compile 'com.jakewharton.rxbinding:rxbinding-design:0.2.0'
+  compile 'com.trello:rxlifecycle:0.2.0'
+  compile 'com.trello:rxlifecycle-components:0.2.0'
+
+  compile 'com.jakewharton:butterknife:7.0.1'
   compile 'com.squareup.retrofit:retrofit:1.9.0'
   compile 'com.google.dagger:dagger:2.0'
   compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
@@ -106,16 +119,15 @@ dependencies {
   debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
   releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 
-  testCompile 'junit:junit:4.12'
-  testCompile "org.mockito:mockito-core:1.9.5"
   androidTestCompile "org.mockito:mockito-core:1.9.5"
   androidTestCompile "com.google.dexmaker:dexmaker:1.0"
   androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.0"
-  androidTestCompile 'com.android.support:support-annotations:22.1.1'
-  androidTestCompile 'com.novoda:rxpresso:0.1.4'
-  androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.1'
-  androidTestApt "com.google.dagger:dagger-compiler:2.0"
-  androidTestApt 'com.github.frankiesardo:auto-parcel-processor:0.3'
+  androidTestCompile 'com.android.support:support-annotations:23.0.0'
+  androidTestCompile 'com.android.support.test:runner:0.3'
+  androidTestCompile 'com.android.support.test:rules:0.3'
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
+  androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
 }
 
 def increaseVersion() {

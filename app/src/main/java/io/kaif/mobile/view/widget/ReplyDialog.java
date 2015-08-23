@@ -2,6 +2,8 @@ package io.kaif.mobile.view.widget;
 
 import javax.inject.Inject;
 
+import com.trello.rxlifecycle.components.support.RxDialogFragment;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -14,12 +16,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.view.daemon.DebateDaemon;
-import rx.android.app.support.RxDialogFragment;
 
 public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorActionListener {
 
@@ -50,7 +51,7 @@ public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorAc
   @Inject
   DebateDaemon debateDaemon;
 
-  @InjectView(R.id.debate_content)
+  @Bind(R.id.debate_content)
   protected EditText contentEditText;
 
   public ReplyDialog() {
@@ -78,7 +79,7 @@ public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorAc
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     LayoutInflater inflater = LayoutInflater.from(getActivity());
     View view = inflater.inflate(R.layout.fragment_reply, null);
-    ButterKnife.inject(this, view);
+    ButterKnife.bind(this, view);
     contentEditText.setOnEditorActionListener(this);
     return new AlertDialog.Builder(getActivity()).setTitle(R.string.reply)
         .setView(view)

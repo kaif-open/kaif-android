@@ -3,12 +3,11 @@
 buildscript {
   repositories {
     jcenter()
-    maven { url 'https://repos.zeroturnaround.com/nexus/content/repositories/zt-public-releases' }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.1.0'
     // This does not break the build when Android Studio is missing the JRebel for Android plugin.
-    classpath 'me.tatarka:gradle-retrolambda:2.5.0'
+    classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     //annotation processing
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
 

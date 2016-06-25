@@ -1,7 +1,5 @@
 package io.kaif.mobile.view;
 
-import javax.inject.Inject;
-
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -11,8 +9,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseActivity;
@@ -25,16 +26,16 @@ public class LoginActivity extends BaseActivity {
   @Inject
   AccountDaemon accountDaemon;
 
-  @Bind(R.id.sign_in)
+  @BindView(R.id.sign_in)
   Button signInBtn;
 
-  @Bind(R.id.sign_in_progress)
+  @BindView(R.id.sign_in_progress)
   ProgressBar signInProgress;
 
-  @Bind(R.id.sign_in_title)
+  @BindView(R.id.sign_in_title)
   TextView signInTitle;
 
-  @Bind(R.id.title)
+  @BindView(R.id.title)
   TextView title;
 
   @Override

@@ -1,9 +1,5 @@
 package io.kaif.mobile.view;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
@@ -27,10 +28,10 @@ public class ArticlesFragment extends BaseFragment {
 
   public static final int RELOAD_EXPIRE_INTERVAL = 5 * 60 * 1000;
 
-  @Bind(R.id.article_list)
+  @BindView(R.id.article_list)
   RecyclerView articleListView;
 
-  @Bind(R.id.pull_to_refresh)
+  @BindView(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
@@ -74,8 +75,8 @@ public class ArticlesFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
+                           ViewGroup container,
+                           Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_articles, container, false);
     ButterKnife.bind(this, view);
     setupView();

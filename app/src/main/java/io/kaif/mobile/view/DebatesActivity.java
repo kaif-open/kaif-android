@@ -1,9 +1,5 @@
 package io.kaif.mobile.view;
 
-import java.io.Serializable;
-
-import javax.inject.Inject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.io.Serializable;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseActivity;
@@ -63,7 +64,7 @@ public class DebatesActivity extends BaseActivity {
 
   public static final String ARTICLE_KEY = "ARTICLE";
 
-  @Bind(R.id.tool_bar)
+  @BindView(R.id.tool_bar)
   Toolbar toolbar;
 
   private ArticleViewModel article;
@@ -71,7 +72,7 @@ public class DebatesActivity extends BaseActivity {
   @Inject
   ArticleDaemon articleDaemon;
 
-  @Bind(R.id.loading)
+  @BindView(R.id.loading)
   ProgressBar loading;
 
   @Override

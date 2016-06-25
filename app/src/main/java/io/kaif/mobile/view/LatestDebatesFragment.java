@@ -1,9 +1,5 @@
 package io.kaif.mobile.view;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
@@ -15,8 +11,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
@@ -29,10 +30,10 @@ public class LatestDebatesFragment extends BaseFragment {
 
   public static final int RELOAD_EXPIRE_INTERVAL = 5 * 60 * 1000;
 
-  @Bind(R.id.debate_list)
+  @BindView(R.id.debate_list)
   RecyclerView debateListView;
 
-  @Bind(R.id.pull_to_refresh)
+  @BindView(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
@@ -61,8 +62,8 @@ public class LatestDebatesFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
+                           ViewGroup container,
+                           Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_latest_debates, container, false);
     ButterKnife.bind(this, view);
     setupView();

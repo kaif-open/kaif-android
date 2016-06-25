@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
-import retrofit.RetrofitError;
-import retrofit.http.GET;
+import retrofit2.adapter.rxjava.HttpException;
+import retrofit2.http.GET;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -33,8 +33,7 @@ class RetryStaleHandler implements InvocationHandler {
     if (methodInfo.canRetry()) {
       Observable result = (Observable) methodInfo.invoke(target, args);
       return result.onErrorResumeNext((Func1<Throwable, Observable>) throwable -> {
-        if (throwable instanceof RetrofitError
-            && ((RetrofitError) throwable).getKind() == RetrofitError.Kind.NETWORK) {
+        if (throwable instanceof HttpException) {
           try {
             return (Observable) getTargetCacheMethod(method).invoke(target, args);
           } catch (Exception e) {

@@ -1,26 +1,27 @@
 package io.kaif.mobile.retrofit;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
-import static org.mockito.Mockito.*;
-
-import java.io.IOException;
-import java.util.Collections;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Header;
-import retrofit.client.Response;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class RetrofitRetryStaleProxyTest {
 
@@ -54,7 +55,7 @@ public class RetrofitRetryStaleProxyTest {
   private RetrofitRetryStaleProxy retrofitRetryStaleProxy;
 
   @Mock
-  private RestAdapter mockAdapter;
+  private RetrofitRetryStaleProxy.RetrofitHolder mockRetrofitHolder;
 
   @Mock
   private Foo$$RetryStale target;
@@ -66,7 +67,7 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_success() {
-    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
+    when(mockRetrofitHolder.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo1("example")).thenReturn(Observable.just("success"));
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
@@ -76,9 +77,11 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_network_error() {
-    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
-    when(target.foo1("example")).thenReturn(Observable.error(RetrofitError.networkError("/foo",
-        new IOException("failed"))));
+    when(mockRetrofitHolder.create(Foo$$RetryStale.class)).thenReturn(target);
+    when(target.foo1("example")).thenReturn(Observable.error(
+        new HttpException(Response.error(404,
+            ResponseBody.create(MediaType.parse("application/json"), "{}"))))
+    );
     when(target.foo1$$RetryStale("example")).thenReturn(Observable.just("success"));
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
@@ -87,24 +90,22 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_non_network_error() {
-    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
-    when(target.foo1("example")).thenReturn(Observable.error(RetrofitError.unexpectedError("/foo",
-        new IllegalArgumentException("failed"))));
+    when(mockRetrofitHolder.create(Foo$$RetryStale.class)).thenReturn(target);
+    when(target.foo1("example")).thenReturn(Observable.error(new IOException("other exception")));
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     try {
       foo.foo1("example").toBlocking().single();
       fail();
-    } catch (RetrofitError expected) {
-      assertEquals(RetrofitError.Kind.UNEXPECTED, expected.getKind());
-      assertTrue(expected.getCause() instanceof IllegalArgumentException);
+    } catch (Exception expected) {
+      assertTrue(expected.getCause() instanceof IOException);
     }
     verify(target, never()).foo1$$RetryStale("example");
   }
 
   @Test
   public void access_non_rx_method() {
-    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
+    when(mockRetrofitHolder.create(Foo$$RetryStale.class)).thenReturn(target);
     when(target.foo2("example")).thenReturn("success");
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
@@ -113,36 +114,37 @@ public class RetrofitRetryStaleProxyTest {
 
   @Test
   public void access_no_cache_retry_method() {
-    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
-    when(target.foo3("example")).thenReturn(Observable.error(RetrofitError.networkError("/foo",
-        new IOException("failed"))));
+    when(mockRetrofitHolder.create(Foo$$RetryStale.class)).thenReturn(target);
+    when(target.foo3("example")).thenReturn(Observable.error(
+        new HttpException(Response.error(404,
+            ResponseBody.create(MediaType.parse("application/json"), "{}")))));
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     try {
       foo.foo3("example").toBlocking().single();
       fail();
-    } catch (RetrofitError expected) {
-      assertTrue(expected.getCause() instanceof IOException);
+    } catch (Exception expected) {
+      assertEquals(HttpException.class, expected.getCause().getClass());
     }
   }
 
   @Test
   public void access_network_error_and_cache_miss() {
-    when(mockAdapter.create(Foo$$RetryStale.class)).thenReturn(target);
-    when(target.foo1("example")).thenReturn(Observable.error(RetrofitError.networkError("/foo",
-        new IOException("failed"))));
-    when(target.foo1$$RetryStale("example")).thenReturn(Observable.error(RetrofitError.httpError(
-        "/foo",
-        new Response("/foo", 501, "stale", Collections.<Header>emptyList(), null),
-        null,
-        null)));
+    when(mockRetrofitHolder.create(Foo$$RetryStale.class)).thenReturn(target);
+    when(target.foo1("example")).thenReturn(Observable.error(
+        new HttpException(Response.error(404,
+            ResponseBody.create(MediaType.parse("application/json"), "{}")))));
+
+    when(target.foo1$$RetryStale("example")).thenReturn(Observable.error(
+        new HttpException(Response.error(501,
+            ResponseBody.create(MediaType.parse("application/json"), "{}")))));
 
     Foo foo = retrofitRetryStaleProxy.create(Foo.class);
     try {
       foo.foo1("example").toBlocking().single();
       fail();
-    } catch (RetrofitError expected) {
-      assertEquals(RetrofitError.Kind.HTTP, expected.getKind());
+    } catch (Exception expected) {
+      assertEquals(HttpException.class, expected.getCause().getClass());
     }
   }
 

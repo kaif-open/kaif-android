@@ -3,10 +3,10 @@ package io.kaif.mobile.service;
 import java.util.List;
 
 import io.kaif.mobile.model.FeedAsset;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface FeedService {

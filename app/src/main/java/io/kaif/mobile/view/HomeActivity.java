@@ -1,13 +1,14 @@
 package io.kaif.mobile.view;
 
-import javax.inject.Inject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
-import butterknife.Bind;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
@@ -20,7 +21,7 @@ public class HomeActivity extends BaseActivity {
   @Inject
   AccountDaemon accountDaemon;
 
-  @Bind(R.id.tool_bar)
+  @BindView(R.id.tool_bar)
   Toolbar toolbar;
 
   @Override

@@ -1,12 +1,5 @@
 package io.kaif.mobile.view.share;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
-import com.jakewharton.rxbinding.widget.RxTextView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -20,7 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import butterknife.Bind;
+
+import com.jakewharton.rxbinding.widget.RxTextView;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
@@ -39,13 +40,13 @@ public class ShareExternalLinkFragment extends BaseFragment {
     return fragment;
   }
 
-  @Bind(R.id.title)
+  @BindView(R.id.title)
   EditText titleEditText;
 
-  @Bind(R.id.url)
+  @BindView(R.id.url)
   EditText urlEditText;
 
-  @Bind(R.id.zone_name)
+  @BindView(R.id.zone_name)
   Spinner zoneNameSpinner;
 
   @Inject
@@ -109,8 +110,8 @@ public class ShareExternalLinkFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
+                           ViewGroup container,
+                           Bundle savedInstanceState) {
 
     setHasOptionsMenu(true);
     final View view = inflater.inflate(R.layout.fragment_share_external_link, container, false);

@@ -1,12 +1,13 @@
 package io.kaif.mobile.view.share;
 
-import javax.inject.Inject;
-
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseActivity;
@@ -14,7 +15,7 @@ import io.kaif.mobile.view.daemon.AccountDaemon;
 
 public class ShareArticleActivity extends BaseActivity {
 
-  @Bind(R.id.tool_bar)
+  @BindView(R.id.tool_bar)
   Toolbar toolbar;
 
   @Inject

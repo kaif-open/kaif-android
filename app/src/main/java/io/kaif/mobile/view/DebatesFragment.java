@@ -1,7 +1,5 @@
 package io.kaif.mobile.view;
 
-import javax.inject.Inject;
-
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,8 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
@@ -31,10 +32,10 @@ public class DebatesFragment extends BaseFragment {
   public static final String ARTICLE = "ARTICLE";
   public static final String DEBATE_ID = "DEBATE_ID";
   public static final int AUTO_SCROLL_OFFSET_DP = 30;
-  @Bind(R.id.debate_list)
+  @BindView(R.id.debate_list)
   RecyclerView debateListView;
 
-  @Bind(R.id.pull_to_refresh)
+  @BindView(R.id.pull_to_refresh)
   SwipeRefreshLayout pullToRefreshLayout;
 
   @Inject
@@ -47,7 +48,7 @@ public class DebatesFragment extends BaseFragment {
   private ArticleViewModel article;
 
   public static DebatesFragment newInstance(ArticleViewModel articleViewModel,
-      String anchorDebateId) {
+                                            String anchorDebateId) {
     DebatesFragment fragment = new DebatesFragment();
     Bundle args = new Bundle();
     args.putSerializable(ARTICLE, articleViewModel);
@@ -67,8 +68,8 @@ public class DebatesFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
+                           ViewGroup container,
+                           Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_debates, container, false);
     ButterKnife.bind(this, view);
     article = (ArticleViewModel) getArguments().getSerializable(ARTICLE);

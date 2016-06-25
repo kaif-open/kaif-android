@@ -1,8 +1,5 @@
 package io.kaif.mobile.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import io.kaif.mobile.R;
 import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Vote;
@@ -33,19 +34,19 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
   static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.vote)
+    @BindView(R.id.vote)
     public VoteArticleButton vote;
-    @Bind(R.id.vote_count)
+    @BindView(R.id.vote_count)
     public ArticleScoreTextView voteCount;
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     public TextView title;
-    @Bind(R.id.link)
+    @BindView(R.id.link)
     public TextView link;
-    @Bind(R.id.zone)
+    @BindView(R.id.zone)
     public TextView zone;
-    @Bind(R.id.debate_count)
+    @BindView(R.id.debate_count)
     public TextView debateCount;
-    @Bind(R.id.author_name)
+    @BindView(R.id.author_name)
     public TextView authorName;
 
     public ArticleViewHolder(View itemView) {

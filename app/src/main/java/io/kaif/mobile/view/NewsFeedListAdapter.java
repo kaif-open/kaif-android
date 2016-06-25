@@ -1,8 +1,5 @@
 package io.kaif.mobile.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -10,8 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 import io.kaif.mobile.R;
 import io.kaif.mobile.kmark.KmarkProcessor;
 import io.kaif.mobile.view.viewmodel.DebateViewModel;
@@ -32,15 +33,15 @@ public class NewsFeedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
   class DebateViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.content)
+    @BindView(R.id.content)
     public TextView content;
-    @Bind(R.id.last_update_time)
+    @BindView(R.id.last_update_time)
     public TextView lastUpdateTime;
-    @Bind(R.id.vote_score)
+    @BindView(R.id.vote_score)
     public TextView voteScore;
-    @Bind(R.id.debater_name)
+    @BindView(R.id.debater_name)
     public TextView debaterName;
-    @Bind(R.id.zone)
+    @BindView(R.id.zone)
     public TextView zone;
 
     private DebateViewModel debateViewModel;

@@ -4,11 +4,11 @@ import java.util.List;
 
 import io.kaif.mobile.model.Debate;
 import io.kaif.mobile.model.DebateNode;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.PUT;
-import retrofit.http.Path;
-import retrofit.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface DebateService {

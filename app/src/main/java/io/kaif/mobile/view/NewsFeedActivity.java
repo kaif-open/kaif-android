@@ -1,5 +1,6 @@
 package io.kaif.mobile.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +8,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
@@ -15,6 +17,8 @@ import io.kaif.mobile.app.BaseActivity;
 
 public class NewsFeedActivity extends BaseActivity {
 
+  //TODO
+  @SuppressLint("ParcelCreator")
   static class NewsFeedActivityIntent extends Intent {
 
     public NewsFeedActivityIntent(Context context) {
@@ -23,7 +27,7 @@ public class NewsFeedActivity extends BaseActivity {
 
   }
 
-  @Bind(R.id.tool_bar)
+  @BindView(R.id.tool_bar)
   Toolbar toolbar;
 
   @Override

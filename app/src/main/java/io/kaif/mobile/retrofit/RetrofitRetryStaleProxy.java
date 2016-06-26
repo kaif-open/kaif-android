@@ -4,7 +4,7 @@ import java.lang.reflect.Proxy;
 
 import javax.inject.Inject;
 
-import retrofit.RestAdapter;
+import retrofit2.Retrofit;
 
 /**
  * TODO
@@ -12,21 +12,35 @@ import retrofit.RestAdapter;
  */
 public class RetrofitRetryStaleProxy {
 
-  @Inject
-  RestAdapter restAdapter;
+  public static class RetrofitHolder {
 
-  public RetrofitRetryStaleProxy(RestAdapter restAdapter) {
-    this.restAdapter = restAdapter;
+    @Inject
+    Retrofit retrofit;
+
+    public RetrofitHolder(Retrofit retrofit) {
+      this.retrofit = retrofit;
+    }
+
+    public <T> T create(Class<T> serviceClass) {
+      return retrofit.create(serviceClass);
+    }
+  }
+
+  @Inject
+  RetrofitHolder retrofitHolder;
+
+  public RetrofitRetryStaleProxy(RetrofitHolder retrofitHolder) {
+    this.retrofitHolder = retrofitHolder;
   }
 
   public <T> T create(Class<T> serviceClass) {
     try {
       return serviceClass.cast(Proxy.newProxyInstance(serviceClass.getClassLoader(),
-          new Class[] { serviceClass },
-          new RetryStaleHandler(restAdapter.create(Class.forName(serviceClass.getName()
+          new Class[]{serviceClass},
+          new RetryStaleHandler(retrofitHolder.create(Class.forName(serviceClass.getName()
               + "$$RetryStale")))));
     } catch (ClassNotFoundException e) {
-      return restAdapter.create(serviceClass);
+      return retrofitHolder.create(serviceClass);
     }
   }
 

@@ -1,7 +1,5 @@
 package io.kaif.mobile.view;
 
-import javax.inject.Inject;
-
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -11,7 +9,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
@@ -26,10 +27,10 @@ public class HomeFragment extends BaseFragment {
     return new HomeFragment();
   }
 
-  @Bind(R.id.sliding_tabs)
+  @BindView(R.id.sliding_tabs)
   TabLayout slidingTabLayout;
 
-  @Bind(R.id.view_pager)
+  @BindView(R.id.view_pager)
   ViewPager viewPager;
 
   @Inject
@@ -83,8 +84,8 @@ public class HomeFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
+                           ViewGroup container,
+                           Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_home, container, false);
     ButterKnife.bind(this, view);
 

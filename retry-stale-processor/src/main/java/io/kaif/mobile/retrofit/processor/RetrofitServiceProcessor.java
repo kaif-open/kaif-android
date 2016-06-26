@@ -1,5 +1,9 @@
 package io.kaif.mobile.retrofit.processor;
 
+import com.google.auto.service.AutoService;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.TypeSpec;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.LinkedHashSet;
@@ -19,15 +23,11 @@ import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
-import com.google.auto.service.AutoService;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
-
-import retrofit.http.DELETE;
-import retrofit.http.GET;
-import retrofit.http.HEAD;
-import retrofit.http.POST;
-import retrofit.http.PUT;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.HEAD;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 @AutoService(Processor.class)
 public class RetrofitServiceProcessor extends AbstractProcessor {

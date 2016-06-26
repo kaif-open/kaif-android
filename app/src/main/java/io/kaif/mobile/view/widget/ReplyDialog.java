@@ -1,9 +1,5 @@
 package io.kaif.mobile.view.widget;
 
-import javax.inject.Inject;
-
-import com.trello.rxlifecycle.components.support.RxDialogFragment;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -16,7 +12,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
+
+import com.trello.rxlifecycle.components.support.RxDialogFragment;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
@@ -51,7 +52,7 @@ public class ReplyDialog extends RxDialogFragment implements TextView.OnEditorAc
   @Inject
   DebateDaemon debateDaemon;
 
-  @Bind(R.id.debate_content)
+  @BindView(R.id.debate_content)
   protected EditText contentEditText;
 
   public ReplyDialog() {

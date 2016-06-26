@@ -1,17 +1,12 @@
 package io.kaif.mobile.view;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
-import static android.support.test.espresso.intent.matcher.UriMatchers.hasHost;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-
-import javax.inject.Inject;
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.intent.Intents;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,19 +15,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import android.app.Instrumentation;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.intent.Intents;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.MediumTest;
+import javax.inject.Inject;
+
 import io.kaif.mobile.DaggerTestBeans;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.TestBeans;
 import io.kaif.mobile.view.daemon.AccountDaemon;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static android.support.test.espresso.intent.matcher.UriMatchers.hasHost;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
@@ -61,7 +60,6 @@ public class LoginActivityTest {
     Intents.release();
   }
 
-  @MediumTest
   @Test
   public void showOauthPage() {
 
@@ -74,8 +72,7 @@ public class LoginActivityTest {
     onView(withId(R.id.sign_in)).perform(click());
 
     intended(allOf(hasAction(equalTo(Intent.ACTION_VIEW)),
-        hasData(hasHost(equalTo("foo.com"))),
-        toPackage("com.android.browser")));
+        hasData(hasHost(equalTo("foo.com")))));
   }
 
 }

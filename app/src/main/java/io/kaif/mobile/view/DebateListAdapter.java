@@ -1,10 +1,5 @@
 package io.kaif.mobile.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,7 +18,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import butterknife.Bind;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.kaif.mobile.R;
@@ -47,23 +48,23 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
   static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.vote)
+    @BindView(R.id.vote)
     public VoteArticleButton vote;
-    @Bind(R.id.vote_count)
+    @BindView(R.id.vote_count)
     public ArticleScoreTextView voteCount;
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     public TextView title;
-    @Bind(R.id.link)
+    @BindView(R.id.link)
     public TextView link;
-    @Bind(R.id.zone)
+    @BindView(R.id.zone)
     public TextView zone;
-    @Bind(R.id.debate_count)
+    @BindView(R.id.debate_count)
     public TextView debateCount;
-    @Bind(R.id.reply)
+    @BindView(R.id.reply)
     public ImageButton replyButton;
-    @Bind(R.id.self_content)
+    @BindView(R.id.self_content)
     public TextView content;
-    @Bind(R.id.author_name)
+    @BindView(R.id.author_name)
     public TextView authorName;
 
     private ArticleViewModel articleViewModel;
@@ -128,15 +129,15 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
   static class DebateViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.content)
+    @BindView(R.id.content)
     public TextView content;
-    @Bind(R.id.last_update_time)
+    @BindView(R.id.last_update_time)
     public TextView lastUpdateTime;
-    @Bind(R.id.vote_score)
+    @BindView(R.id.vote_score)
     public TextView voteScore;
-    @Bind(R.id.debater_name)
+    @BindView(R.id.debater_name)
     public TextView debaterName;
-    @Bind(R.id.debate_actions)
+    @BindView(R.id.debate_actions)
     public DebateActions debateActions;
 
     public DebateViewHolder(View itemView) {
@@ -173,7 +174,7 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Drawable createDebateDrawable(DebateViewModel debateViewModel, Context context) {
       StateListDrawable stateListDrawable = new StateListDrawable();
-      stateListDrawable.addState(new int[] { android.R.attr.state_activated },
+      stateListDrawable.addState(new int[]{android.R.attr.state_activated},
           new LevelDrawable(context,
               debateViewModel.getLevel(),
               context.getResources().getColor(R.color.kaif_selected_blue)));
@@ -194,8 +195,8 @@ public class DebateListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
   private final OnReplyClickListener onReplyClickListener;
 
   public DebateListAdapter(ArticleViewModel article,
-      VoteDaemon voteDaemon,
-      OnReplyClickListener onReplyClickListener) {
+                           VoteDaemon voteDaemon,
+                           OnReplyClickListener onReplyClickListener) {
     this.onReplyClickListener = onReplyClickListener;
     this.debates = new ArrayList<>();
     this.article = article;

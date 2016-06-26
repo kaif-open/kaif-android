@@ -3,10 +3,10 @@ package io.kaif.mobile.service;
 import java.util.List;
 
 import io.kaif.mobile.model.Vote;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface VoteService {
@@ -83,11 +83,11 @@ public interface VoteService {
 
   @GET("/v1/vote/article")
   Observable<List<Vote>> listArticleVotes(
-      @Query(value = "article-id", encodeValue = false) CommaSeparatedParam articleIds);
+      @Query(value = "article-id") CommaSeparatedParam articleIds);
 
   @GET("/v1/vote/debate")
   Observable<List<Vote>> listDebateVotes(
-      @Query(value = "debate-id", encodeValue = false) CommaSeparatedParam articleIds);
+      @Query(value = "debate-id") CommaSeparatedParam articleIds);
 
   @POST("/v1/vote/article")
   Observable<Void> voteArticle(@Body VoteArticleEntry voteArticleEntry);

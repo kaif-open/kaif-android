@@ -24,8 +24,8 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".view.LoginActivity"
-                android:launchMode="singleTop">
+            android:name=".view.LoginActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 

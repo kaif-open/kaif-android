@@ -3,10 +3,8 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.1.2'
-    classpath 'me.tatarka:gradle-retrolambda:3.2.5'
-    //annotation processing
-    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    classpath 'com.android.tools.build:gradle:2.2.2'
+    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
   }
 }
 
@@ -19,4 +17,15 @@ allprojects {
       maven { url "https://clojars.org/repo/" }
     }
   }
+}
+
+ext {
+  buildToolsVersion = "25.0.0"
+  supportLibVersion = "25.0.1"
+  runnerVersion = "0.5"
+  rulesVersion = "0.5"
+  espressoVersion = "2.2.2"
+  daggerVersion = "2.7"
+  butterknifeVersion = "8.4.0"
+  retrofitVersion = "2.1.0"
 }

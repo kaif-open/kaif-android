@@ -109,7 +109,7 @@ dependencies {
   compile 'com.trello:rxlifecycle:0.6.1'
   compile 'com.trello:rxlifecycle-components:0.6.1'
 
-  compile 'com.jakewharton:butterknife:8.0.1'
+  compile 'com.jakewharton:butterknife:8.4.0'
   compile 'com.squareup.retrofit2:retrofit:2.1.0'
   compile 'com.squareup.retrofit2:converter-gson:2.1.0'
   compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'kotlin-android'
 
 android {
 
@@ -73,6 +75,15 @@ android {
     }
   }
 
+  android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+      def outputFile = output.outputFile
+      if (outputFile != null && outputFile.name.endsWith('.apk')) {
+        File apk = outputFile
+        output.outputFile = new File(apk.parentFile, apk.name.replace(".apk", "-${buildVersionName}.apk"))
+      }
+    }
+  }
 }
 
 dependencies {
@@ -94,6 +105,14 @@ dependencies {
   compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
   compile 'com.trello:rxlifecycle:1.0'
   compile 'com.trello:rxlifecycle-components:1.0'
+
+  compile 'org.jetbrains.kotlin:kotlin-stdlib:' + rootProject.kotlinVersion
+  compile 'org.jetbrains.anko:anko-sdk15:' + rootProject.ankoVersion
+
+  compile 'org.jetbrains.anko:anko-recyclerview-v7:' + rootProject.ankoVersion
+  compile 'org.jetbrains.anko:anko-design:' + rootProject.ankoVersion
+  compile 'org.jetbrains.anko:anko-support-v4:' + rootProject.ankoVersion
+  compile 'org.jetbrains.anko:anko-appcompat-v7:' + rootProject.ankoVersion
 
   compile 'com.jakewharton:butterknife:' + rootProject.butterknifeVersion
   compile 'com.squareup.retrofit2:retrofit:' + rootProject.retrofitVersion

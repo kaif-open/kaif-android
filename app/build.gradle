@@ -135,7 +135,12 @@ dependencies {
   androidTestCompile 'com.android.support.test.espresso:espresso-intents:' + rootProject.espressoVersion
 
   androidTestCompile 'com.google.dagger:dagger:' + rootProject.daggerVersion
+<<<<<<< HEAD
   androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.daggerVersion
+=======
+  androidTestApt 'com.google.dagger:dagger-compiler:' + rootProject.daggerVersion
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+>>>>>>> Add RecyclerView & adaper
 }
 
 task releaseNewVersion(dependsOn: 'assembleRelease') << {
@@ -147,4 +152,7 @@ task releaseNewVersion(dependsOn: 'assembleRelease') << {
   def nextCode = versionProps['VERSION_CODE'].toInteger() + 1
   versionProps['VERSION_CODE'] = nextCode.toString()
   versionProps.store(file.newWriter(), null)
+}
+repositories {
+  mavenCentral()
 }

@@ -66,6 +66,7 @@
     </activity>
     <activity
         android:name=".view.HonorActivity"
+        android:label="@string/honor"
         android:parentActivityName=".view.HomeActivity">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"

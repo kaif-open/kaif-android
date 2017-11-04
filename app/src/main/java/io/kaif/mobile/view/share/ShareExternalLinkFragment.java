@@ -40,6 +40,8 @@ public class ShareExternalLinkFragment extends BaseFragment {
     return fragment;
   }
 
+  MenuItem shareBtn;
+
   @BindView(R.id.title)
   EditText titleEditText;
 
@@ -64,7 +66,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.menu_share, menu);
-    MenuItem shareBtn = menu.findItem(R.id.action_share);
+    shareBtn = menu.findItem(R.id.action_share);
     shareBtn.setEnabled(false);
 
     RxTextView.textChanges(titleEditText)
@@ -76,6 +78,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == R.id.action_share) {
+      item.setEnabled(false);
       createArticle(false);
       return true;
     }
@@ -83,6 +86,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
   }
 
   private void createArticle(boolean forceCreate) {
+    shareBtn.setEnabled(false);
     bind(articleDaemon.createExternalLink(urlEditText.getText().toString(),
         titleEditText.getText().toString(),
         (String) zoneNameSpinner.getSelectedItem(),
@@ -91,6 +95,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
         notifyDuplicatePostAndResend();
         return;
       }
+      shareBtn.setEnabled(true);
       Toast.makeText(getActivity(), throwable.toString(), Toast.LENGTH_SHORT).show();
     });
   }
@@ -102,7 +107,7 @@ public class ShareExternalLinkFragment extends BaseFragment {
           createArticle(true);
         })
         .setNegativeButton(R.string.dialog_cancel, (dialog, whichButton) -> {
-
+          shareBtn.setEnabled(true);
         })
         .create()
         .show();

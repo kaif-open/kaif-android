@@ -2,6 +2,7 @@ package io.kaif.mobile.view.share;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,10 +27,12 @@ import butterknife.ButterKnife;
 import io.kaif.mobile.KaifApplication;
 import io.kaif.mobile.R;
 import io.kaif.mobile.app.BaseFragment;
+import io.kaif.mobile.model.Article;
 import io.kaif.mobile.model.Zone;
 import io.kaif.mobile.model.exception.DuplicateArticleUrlException;
 import io.kaif.mobile.view.daemon.ArticleDaemon;
 import io.kaif.mobile.view.daemon.ZoneDaemon;
+import rx.Observable;
 
 public class ShareExternalLinkFragment extends BaseFragment {
 
@@ -79,39 +82,62 @@ public class ShareExternalLinkFragment extends BaseFragment {
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == R.id.action_share) {
       item.setEnabled(false);
-      createArticle(false);
+      createArticle();
       return true;
     }
     return super.onOptionsItemSelected(item);
   }
 
-  private void createArticle(boolean forceCreate) {
+  private void createArticle() {
     shareBtn.setEnabled(false);
-    bind(articleDaemon.createExternalLink(urlEditText.getText().toString(),
-        titleEditText.getText().toString(),
-        (String) zoneNameSpinner.getSelectedItem(),
-        forceCreate)).subscribe(aVoid -> getActivity().finish(), throwable -> {
+    doCreateArticle(false).onErrorResumeNext(throwable -> {
       if (throwable instanceof DuplicateArticleUrlException) {
-        notifyDuplicatePostAndResend();
-        return;
+        return createDuplicateDialog().flatMap(confirm -> {
+          if (confirm) {
+            return doCreateArticle(true);
+          } else {
+            return Observable.<Article>error(throwable);
+          }
+        });
       }
+      return Observable.error(throwable);
+    }).subscribe(article -> {
+      getActivity().finish();
+    }, throwable -> {
       shareBtn.setEnabled(true);
       Toast.makeText(getActivity(), throwable.toString(), Toast.LENGTH_SHORT).show();
     });
   }
 
-  private void notifyDuplicatePostAndResend() {
-    new AlertDialog.Builder(getActivity()).setTitle(R.string.warning)
-        .setMessage(R.string.url_exist)
-        .setPositiveButton(R.string.force_create, (dialog, whichButton) -> {
-          createArticle(true);
-        })
-        .setNegativeButton(R.string.dialog_cancel, (dialog, whichButton) -> {
-          shareBtn.setEnabled(true);
-        })
-        .create()
-        .show();
+  private Observable<Article> doCreateArticle(boolean forceCreate) {
+    return bind(articleDaemon.createExternalLink(urlEditText.getText().toString(),
+        titleEditText.getText().toString(),
+        (String) zoneNameSpinner.getSelectedItem(),
+        forceCreate));
   }
+
+  @NonNull
+  private Observable<Boolean> createDuplicateDialog() {
+    return Observable.create(subscriber -> {
+      new AlertDialog.Builder(getActivity()).setTitle(R.string.warning)
+          .setMessage(R.string.url_exist)
+          .setPositiveButton(R.string.force_create, (dialog, whichButton) -> {
+            subscriber.onNext(true);
+            subscriber.onCompleted();
+          })
+          .setNegativeButton(R.string.dialog_cancel, (dialog, whichButton) -> {
+            subscriber.onNext(false);
+            subscriber.onCompleted();
+          })
+          .setOnCancelListener(dialogInterface -> {
+            subscriber.onNext(false);
+            subscriber.onCompleted();
+          })
+          .create()
+          .show();
+    });
+  }
+
 
   @Override
   public View onCreateView(LayoutInflater inflater,

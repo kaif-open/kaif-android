@@ -1,31 +1,31 @@
 buildscript {
   repositories {
     jcenter()
+    google()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.3'
-    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    classpath 'com.android.tools.build:gradle:3.0.0'
   }
 }
 
 allprojects {
   repositories {
     jcenter()
+    google()
     maven {
       //for dagger2
       url "https://oss.sonatype.org/content/repositories/snapshots"
-      maven { url "https://clojars.org/repo/" }
     }
   }
 }
 
 ext {
-  buildToolsVersion = "25.0.0"
-  supportLibVersion = "25.0.1"
-  runnerVersion = "0.5"
-  rulesVersion = "0.5"
-  espressoVersion = "2.2.2"
-  daggerVersion = "2.7"
-  butterknifeVersion = "8.4.0"
-  retrofitVersion = "2.1.0"
+  buildToolsVersion = "26.0.2"
+  supportLibVersion = "27.0.0"
+  runnerVersion = "1.0.1"
+  rulesVersion = "1.0.1"
+  espressoVersion = "3.0.1"
+  daggerVersion = "2.12"
+  butterknifeVersion = "8.8.1"
+  retrofitVersion = "2.3.0"
 }

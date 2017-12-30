@@ -3,17 +3,24 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="io.kaif.mobile.view.HomeActivity">
 
-    <item
-            android:id="@+id/action_news_feed"
-            android:title="@string/news_feed"
-            android:icon="@drawable/ic_notifications_white"
-            android:orderInCategory="200"
-            app:showAsAction="ifRoom"/>
+  <item
+      android:id="@+id/action_news_feed"
+      android:icon="@drawable/ic_notifications_white"
+      android:orderInCategory="200"
+      android:title="@string/news_feed"
+      app:showAsAction="ifRoom"/>
 
-    <item
-            android:id="@+id/action_sign_out"
-            android:title="@string/action_sign_out"
-            android:orderInCategory="100"
-            app:showAsAction="never"/>
+  <!--<item-->
+  <!--android:id="@+id/action_honor"-->
+  <!--android:icon="@drawable/ic_record_voice_over_white"-->
+  <!--android:orderInCategory="200"-->
+  <!--android:title="@string/honor"-->
+  <!--app:showAsAction="ifRoom"/>-->
+
+  <item
+      android:id="@+id/action_sign_out"
+      android:orderInCategory="100"
+      android:title="@string/action_sign_out"
+      app:showAsAction="never"/>
 
 </menu>

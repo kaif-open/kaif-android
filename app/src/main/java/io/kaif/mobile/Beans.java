@@ -1,8 +1,9 @@
 package io.kaif.mobile;
 
+import android.app.Application;
+
 import javax.inject.Singleton;
 
-import android.app.Application;
 import dagger.Component;
 import io.kaif.mobile.service.ServiceModule;
 import io.kaif.mobile.util.UtilModule;
@@ -11,6 +12,7 @@ import io.kaif.mobile.view.DebatesActivity;
 import io.kaif.mobile.view.DebatesFragment;
 import io.kaif.mobile.view.HomeActivity;
 import io.kaif.mobile.view.HomeFragment;
+import io.kaif.mobile.view.HonorFragment;
 import io.kaif.mobile.view.LatestDebatesFragment;
 import io.kaif.mobile.view.LoginActivity;
 import io.kaif.mobile.view.NewsFeedActivity;
@@ -57,6 +59,8 @@ public interface Beans {
   void inject(NewsFeedActivity newsFeedActivity);
 
   void inject(NewsFeedActivityFragment newsFeedActivityFragment);
+
+  void inject(HonorFragment honorFragment);
 
   final class Initializer {
     public static Beans init(Application application) {

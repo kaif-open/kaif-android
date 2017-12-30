@@ -1,56 +1,34 @@
 buildscript {
-<<<<<<< HEAD
-=======
-  ext.kotlin_version = '1.0.6'
   ext {
-    buildToolsVersion = "25.0.0"
-    supportLibVersion = "25.0.1"
-    runnerVersion = "0.5"
-    rulesVersion = "0.5"
-    espressoVersion = "2.2.2"
-    daggerVersion = "2.7"
-    butterknifeVersion = "8.4.0"
-    retrofitVersion = "2.1.0"
-    kotlinVersion = '1.0.6'
-    ankoVersion = '0.9'
+    buildToolsVersion = "26.0.2"
+    supportLibVersion = "27.0.2"
+    runnerVersion = "1.0.1"
+    rulesVersion = "1.0.1"
+    espressoVersion = "3.0.1"
+    daggerVersion = "2.14.1"
+    butterknifeVersion = "8.8.1"
+    retrofitVersion = "2.3.0"
+    kotlinVersion = '1.2.10'
+    ankoVersion = '0.10.4'
   }
 
->>>>>>> Add RecyclerView & adaper
   repositories {
     jcenter()
+    google()
   }
   dependencies {
-<<<<<<< HEAD
-    classpath 'com.android.tools.build:gradle:3.0.0'
-    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:' + rootProject.kotlinVersion
-=======
-    classpath 'com.android.tools.build:gradle:2.2.3'
-    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
->>>>>>> Add RecyclerView & adaper
+    classpath 'com.android.tools.build:gradle:3.0.1'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
   }
 }
 
 allprojects {
   repositories {
     jcenter()
+    google()
     maven {
       //for dagger2
       url "https://oss.sonatype.org/content/repositories/snapshots"
-      maven { url "https://clojars.org/repo/" }
     }
   }
-}
-
-ext {
-  buildToolsVersion = "26.0.2"
-  supportLibVersion = "27.0.0"
-  runnerVersion = "1.0.1"
-  rulesVersion = "1.0.1"
-  espressoVersion = "3.0.1"
-  daggerVersion = "2.12"
-  butterknifeVersion = "8.8.1"
-  retrofitVersion = "2.3.0"
-  kotlinVersion = '1.0.5-2'
-  ankoVersion = '0.9'
 }

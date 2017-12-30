@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
 
@@ -21,6 +21,10 @@ android {
 
   compileSdkVersion 26
   buildToolsVersion rootProject.buildToolsVersion
+
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
 
   defaultConfig {
     applicationId "io.kaif.mobile"
@@ -74,16 +78,6 @@ android {
       events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
     }
   }
-
-  android.applicationVariants.all { variant ->
-    variant.outputs.each { output ->
-      def outputFile = output.outputFile
-      if (outputFile != null && outputFile.name.endsWith('.apk')) {
-        File apk = outputFile
-        output.outputFile = new File(apk.parentFile, apk.name.replace(".apk", "-${buildVersionName}.apk"))
-      }
-    }
-  }
 }
 
 dependencies {
@@ -107,8 +101,8 @@ dependencies {
   compile 'com.trello:rxlifecycle-components:1.0'
 
   compile 'org.jetbrains.kotlin:kotlin-stdlib:' + rootProject.kotlinVersion
-  compile 'org.jetbrains.anko:anko-sdk15:' + rootProject.ankoVersion
 
+  compile 'org.jetbrains.anko:anko-sdk25:' + rootProject.ankoVersion
   compile 'org.jetbrains.anko:anko-recyclerview-v7:' + rootProject.ankoVersion
   compile 'org.jetbrains.anko:anko-design:' + rootProject.ankoVersion
   compile 'org.jetbrains.anko:anko-support-v4:' + rootProject.ankoVersion
@@ -120,12 +114,12 @@ dependencies {
   compile 'com.squareup.retrofit2:adapter-rxjava:' + rootProject.retrofitVersion
   compile 'com.google.dagger:dagger:' + rootProject.daggerVersion
   compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-  compile 'org.apache.commons:commons-lang3:3.4'
+  compile 'org.apache.commons:commons-lang3:3.7'
 
   debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
   releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
-  androidTestCompile "org.mockito:mockito-core:2.11.0"
+  androidTestCompile "org.mockito:mockito-core:2.13.0"
   androidTestCompile "com.google.dexmaker:dexmaker:1.0"
   androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.0"
   androidTestCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion
@@ -135,12 +129,8 @@ dependencies {
   androidTestCompile 'com.android.support.test.espresso:espresso-intents:' + rootProject.espressoVersion
 
   androidTestCompile 'com.google.dagger:dagger:' + rootProject.daggerVersion
-<<<<<<< HEAD
   androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.daggerVersion
-=======
-  androidTestApt 'com.google.dagger:dagger-compiler:' + rootProject.daggerVersion
-  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
->>>>>>> Add RecyclerView & adaper
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 }
 
 task releaseNewVersion(dependsOn: 'assembleRelease') << {

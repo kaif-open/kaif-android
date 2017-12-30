@@ -10,7 +10,7 @@ import org.jetbrains.anko.*
 
 class HonorAdapter : RecyclerView.Adapter<HonorViewHolder>() {
 
-    val honors = arrayOf("123", "456", "789")
+    private val honors = arrayOf("123", "456", "789", "123", "456", "789", "123", "456", "789", "123", "456", "789", "123", "456", "789", "123", "456", "789")
 
     override fun getItemCount(): Int {
         return honors.size
@@ -32,18 +32,16 @@ class HonorView : AnkoComponent<ViewGroup> {
                 lparams(width = matchParent, height = dip(48))
                 orientation = LinearLayout.HORIZONTAL
                 textView {
-                    lparams(width = matchParent, height = dip(48))
                     id = R.id.title
                     textSize = 16f
-                }
+                }.lparams(width = matchParent, height = dip(48))
             }
         }
     }
 }
 
 class HonorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    var title: TextView? = itemView.findViewById(R.id.title) as TextView?
+    var title: TextView? = itemView.findViewById(R.id.title)
 
     fun bind(data: String) {
         title?.text = "hi $data"

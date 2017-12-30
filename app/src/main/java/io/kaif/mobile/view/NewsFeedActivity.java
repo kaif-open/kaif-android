@@ -21,7 +21,7 @@ public class NewsFeedActivity extends BaseActivity {
   @SuppressLint("ParcelCreator")
   static class NewsFeedActivityIntent extends Intent {
 
-    public NewsFeedActivityIntent(Context context) {
+    NewsFeedActivityIntent(Context context) {
       super(context, NewsFeedActivity.class);
     }
 

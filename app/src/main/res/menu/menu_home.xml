@@ -10,12 +10,12 @@
       android:title="@string/news_feed"
       app:showAsAction="ifRoom"/>
 
-  <item
-      android:id="@+id/action_honor"
-      android:icon="@drawable/ic_record_voice_over_white"
-      android:orderInCategory="200"
-      android:title="@string/honor"
-      app:showAsAction="ifRoom"/>
+  <!--<item-->
+  <!--android:id="@+id/action_honor"-->
+  <!--android:icon="@drawable/ic_record_voice_over_white"-->
+  <!--android:orderInCategory="200"-->
+  <!--android:title="@string/honor"-->
+  <!--app:showAsAction="ifRoom"/>-->
 
   <item
       android:id="@+id/action_sign_out"

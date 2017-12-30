@@ -73,5 +73,4 @@
           android:value=".view.HomeActivity"/>
     </activity>
   </application>
-
 </manifest>

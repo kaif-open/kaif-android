@@ -24,7 +24,8 @@ class HonorFragment : BaseFragment() {
     }
 
     lateinit var honors: RecyclerView
-    lateinit var honorsAdapter: HonorAdapter
+
+    private lateinit var honorsAdapter: HonorAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,18 +33,13 @@ class HonorFragment : BaseFragment() {
         honorsAdapter = HonorAdapter()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return HonorFragmentUI(honorsAdapter).createView(AnkoContext.create(ctx, this))
     }
-
 }
 
 
-class HonorFragmentUI(val honorAdapter: HonorAdapter) : AnkoComponent<HonorFragment> {
+class HonorFragmentUI(private val honorAdapter: HonorAdapter) : AnkoComponent<HonorFragment> {
     override fun createView(ui: AnkoContext<HonorFragment>) = with(ui) {
         frameLayout {
             lparams(width = matchParent, height = matchParent)

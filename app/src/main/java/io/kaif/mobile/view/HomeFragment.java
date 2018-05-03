@@ -75,10 +75,6 @@ public class HomeFragment extends BaseFragment {
       accountDaemon.signOut();
       return true;
     }
-    if (id == R.id.action_honor) {
-      startActivity(new HonorActivityIntent(getActivity()));
-      return true;
-    }
     if (id == R.id.action_news_feed) {
       startActivity(new NewsFeedActivity.NewsFeedActivityIntent(getActivity()));
       return true;

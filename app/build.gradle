@@ -20,7 +20,7 @@ android {
     exclude 'META-INF/services/javax.annotation.processing.Processor'
   }
 
-  compileSdkVersion 26
+  compileSdkVersion 27
   buildToolsVersion rootProject.buildToolsVersion
 
   sourceSets {
@@ -30,7 +30,7 @@ android {
   defaultConfig {
     applicationId "io.kaif.mobile"
     minSdkVersion 16
-    targetSdkVersion 26
+    targetSdkVersion 27
     versionCode buildVersionCode.toInteger()
     versionName buildVersionName
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -86,7 +86,7 @@ dependencies {
   kapt "com.google.dagger:dagger-compiler:" + rootProject.daggerVersion
   kapt 'com.jakewharton:butterknife-compiler:' + rootProject.butterknifeVersion
   kapt project(':retry-stale-processor')
-  provided 'javax.annotation:jsr250-api:1.0'
+  compileOnly 'javax.annotation:jsr250-api:1.0'
   implementation 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
   implementation 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion
   implementation 'com.android.support:design:' + rootProject.supportLibVersion
@@ -107,11 +107,11 @@ dependencies {
   implementation 'com.squareup.retrofit2:converter-gson:' + rootProject.retrofitVersion
   implementation 'com.squareup.retrofit2:adapter-rxjava:' + rootProject.retrofitVersion
   implementation 'com.google.dagger:dagger:' + rootProject.daggerVersion
-  implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+  implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
   implementation 'org.apache.commons:commons-lang3:3.7'
   debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
   releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-  androidTestImplementation 'org.mockito:mockito-core:2.13.0'
+  androidTestImplementation 'org.mockito:mockito-core:2.17.0'
   androidTestImplementation 'com.google.dexmaker:dexmaker:1.0'
   androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.0'
   androidTestImplementation 'com.android.support:support-annotations:' + rootProject.supportLibVersion

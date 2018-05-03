@@ -1,14 +1,14 @@
 buildscript {
   ext {
-    buildToolsVersion = "26.0.2"
+    buildToolsVersion = "27.0.3"
     supportLibVersion = "27.0.2"
     runnerVersion = "1.0.1"
     rulesVersion = "1.0.1"
     espressoVersion = "3.0.1"
     daggerVersion = "2.14.1"
     butterknifeVersion = "8.8.1"
-    retrofitVersion = "2.3.0"
-    kotlinVersion = '1.2.10'
+    retrofitVersion = "2.4.0"
+    kotlinVersion = '1.2.30'
     ankoVersion = '0.10.4'
   }
   repositories {
@@ -16,7 +16,7 @@ buildscript {
     google()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.1'
+    classpath 'com.android.tools.build:gradle:3.1.2'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
   }
 }
